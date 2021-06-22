@@ -1,4 +1,6 @@
-﻿namespace RetroShooter.Engine
+﻿using System;
+
+namespace RetroShooter.Engine
 {
     /**
      * Base class for every object placeable in the world
@@ -28,7 +30,7 @@
 
         public BaseObject(string name)
         {
-            _name = name;
+            _name = name ?? throw new ArgumentNullException(nameof(name));;
         }
 
         public  virtual void Init(){}

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RetroShooter.Engine;
 
 namespace RetroShooter
 {
@@ -125,24 +127,52 @@ namespace RetroShooter
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private TestImage image;
+        /**
+         * Id of last spawned actor
+         * used to give actor a way to get identified without numbers getting repreated
+         */
+        private int lastActorId = 0;
+            
+        /**
+         * All of the actors that are spawned in the world
+         */
+        protected List<Engine.Actor> actors = new List<Actor>();
 
-        private Test3D _test3D;
+        /**
+         * Adds actor to the world.
+         * If name is already taken or any other error occured => returns null
+         */
+        public Actor SpawnActor<T>(string name,Actor owner,object[] args)
+        {
+            if(actors.Find(item=> item.Name == name) == null)
+            {
+                try
+                {
+                    var actor = Activator.CreateInstance(typeof(T), new object[] {name,lastActorId, args,owner}) as Actor;
+                    lastActorId++;
+                    actors.Add(actor);
+                }
+                catch (Exception e)
+                {
+                    //TODO: Add logging information about exception
+                    Debug.Write(e.Message);
+                    return null;
+                }
+            }
+
+            return null;
+        }
         
         public RetroShooterGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            image = new TestImage("Textures/T_Bricks");
-
-            _test3D = new Test3D();
+          
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            _test3D.Init(_graphics.GraphicsDevice);
             base.Initialize();
         }
 
@@ -150,9 +180,6 @@ namespace RetroShooter
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            image.LoadContent(Content);
-            
-            _test3D.LoadContent(_graphics.GraphicsDevice,Content);
            
         }
 
@@ -161,28 +188,6 @@ namespace RetroShooter
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                _test3D.camPosition.Y -= 1;
-                _test3D.camTarget.Y -= 1;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                _test3D.camPosition.Y += 1;
-                _test3D.camTarget.Y += 1;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                _test3D.camPosition.X += 1;
-                _test3D.camTarget.X += 1;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                _test3D.camPosition.X -= 1;
-                _test3D.camTarget.X -= 1;
-            }
-            _test3D.viewMatrix = Matrix.CreateLookAt( _test3D.camPosition,  _test3D.camTarget, 
-                Vector3.Up);
             base.Update(gameTime);
         }
 
@@ -190,7 +195,7 @@ namespace RetroShooter
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _test3D.Draw(gameTime,_graphics.GraphicsDevice);
+            
             _spriteBatch.Begin();
             
             _spriteBatch.End();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework;
 
@@ -20,6 +21,16 @@ namespace RetroShooter.Engine
         private Vector3 scale;
 
         /**
+         * Game is the class that handles all of the updates
+         */
+        protected RetroShooterGame game;
+
+        /*
+         * Id of the actor in the world that it is spawned in
+         */
+        protected int id;
+
+        /**
          * The actor that owns this actor.
          * If actor is a child/slave of the actor then their location is always relative to the owner/parent
          * If this is null then actor is "free"
@@ -32,12 +43,15 @@ namespace RetroShooter.Engine
          */
         protected List<Component> Components = new List<Component>();
 
-        public Actor(string name, Vector3 location = default, Vector3 rotation = default,
+
+        public Actor(string name , int id,RetroShooterGame game, Vector3 location = default, Vector3 rotation = default,
             Vector3 scale = default, Actor owner = null) : base(name)
         {
             this.location = location;
             this.rotation = rotation;
             this.scale = scale;
+            this.game = game ?? throw new ArgumentNullException(nameof(game));
+            this.id = id;
             this.owner = owner;
         }
 
@@ -45,12 +59,22 @@ namespace RetroShooter.Engine
         {
             if (Components.Find(item => _name == name) == null)
             {
-                var comp = Activator.CreateInstance(typeof(T), new object[] {name, this, args}) as Component;
-                if (comp != null)
+                try
                 {
-                    Components.Add(comp);
+                    var comp = Activator.CreateInstance(typeof(T), new object[] {name, this, args}) as Component;
+                    if (comp != null)
+                    {
+                        Components.Add(comp);
+                    }
+
+                    return comp;
                 }
-                return comp;
+                catch (Exception e)
+                {
+                    //TODO: Add logging information about exception
+                    Debug.Write(e.Message);
+                    return null;
+                }
             }
             return null;
         }
@@ -122,6 +146,14 @@ namespace RetroShooter.Engine
             set => owner = value;
         }
 
-        
+        protected int Id => id;
+
+        /**
+         * Game is the class that handles all of the updates
+         */
+        public RetroShooterGame Game
+        {
+            get => game;
+        }
     }
 }
