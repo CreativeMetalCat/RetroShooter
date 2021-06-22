@@ -6,38 +6,10 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroShooter.Engine;
+using RetroShooter.Engine.Camera;
 
 namespace RetroShooter
 {
-    public class TestImage
-    {
-        private string textureName;
-
-        public TestImage(string _textureName)
-        {
-            textureName = _textureName;
-        }
-        
-        /**
-         * Texture to draw
-         */
-        public Texture2D Image;
-
-        /**
-         * Onscreen location
-         */
-        public Vector2 Location;
-
-       public void LoadContent(ContentManager manager)
-        {
-            Image = manager.Load<Texture2D>(textureName);
-        }
-        
-       public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(Image,Location,Color.White);
-        }
-    }
 
     public class Test3D
     {
@@ -127,6 +99,19 @@ namespace RetroShooter
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        public GraphicsDevice GraphicsDevice => _graphics.GraphicsDevice;
+        
+        /**
+         * Current camera that is used for rendering
+         */
+        public Camera CurrentCamera
+        {
+            get => currentCamera;
+            set => currentCamera = value;
+        }
+
+        protected Camera currentCamera;
+        
         /**
          * Id of last spawned actor
          * used to give actor a way to get identified without numbers getting repreated
