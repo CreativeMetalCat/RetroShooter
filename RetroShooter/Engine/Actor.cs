@@ -55,27 +55,17 @@ namespace RetroShooter.Engine
             this.owner = owner;
         }
 
-        public Component AddComponent<T>(string name, object[] args) where T : Component
+        /*
+         * Registers the component as this actor's component
+         */
+        public T AddComponent<T>(T comp) where T : Component
         {
-            if (Components.Find(item => _name == name) == null)
+            if (Components.Find(item => _name == comp.Name) == null)
             {
-                try
-                {
-                    var comp = Activator.CreateInstance(typeof(T), new object[] {name, this, args}) as Component;
-                    if (comp != null)
-                    {
-                        Components.Add(comp);
-                    }
-
-                    return comp;
-                }
-                catch (Exception e)
-                {
-                    //TODO: Add logging information about exception
-                    Debug.Write(e.Message);
-                    return null;
-                }
+                Components.Add(comp);
+                comp.Owner = this;
             }
+
             return null;
         }
 
@@ -155,5 +145,32 @@ namespace RetroShooter.Engine
         {
             get => game;
         }
+
+        public override void Init()
+        {
+            base.Init();
+            foreach (Component component in Components)
+            {
+                component?.Init();
+            }
+        }
+
+        public override void Update(float deltaTime)
+        {
+            base.Update(deltaTime);
+            foreach (Component component in Components)
+            {
+                component?.Update(deltaTime);
+            }
+        }
+
+        public virtual void Draw(float deltaTime)
+        {
+            foreach (Component component in Components)
+            {
+                component?.Draw(deltaTime);
+            }
+        }
+        
     }
 }

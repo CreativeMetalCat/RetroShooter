@@ -20,5 +20,10 @@ namespace RetroShooter.Engine
             get => owner;
             set => owner = value;
         }
+
+        public virtual void Draw(float deltaTime)
+        {
+            
+        }
     }
 }

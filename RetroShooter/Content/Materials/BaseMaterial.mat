@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Material>
-  <EffectName>BasicEffect</EffectName>
+  <EffectName>TestEffect</EffectName>
  <Textures>
-  <Texure type="base">Textures/T_Bricks</Texure>
+  <Texure type="BaseTexture">Textures/T_Bricks</Texure>
  </Textures>
 </Material>

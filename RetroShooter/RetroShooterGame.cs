@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using RetroShooter.Engine;
 using RetroShooter.Engine.Camera;
 using RetroShooter.Engine.Material;
+using RetroShooter.Shooter;
 
 namespace RetroShooter
 {
@@ -126,29 +127,20 @@ namespace RetroShooter
 
         /**
          * Adds actor to the world.
-         * If name is already taken or any other error occured => returns null
+         * If name is already taken or any other error occured => returns null and doesn't add actor
+         * It is preferable to pass not already existing actor but a `new Actor(args)`
          */
-        public Actor SpawnActor<T>(string name,Actor owner,object[] args)
+        public T AddActor<T>(T actor) where T: Actor
         {
-            if(actors.Find(item=> item.Name == name) == null)
+            if (actors.Find(item => item.Name == actor.Name) == null)
             {
-                try
-                {
-                    var actor = Activator.CreateInstance(typeof(T), new object[] {name,lastActorId, args,owner}) as Actor;
-                    lastActorId++;
-                    actors.Add(actor);
-                }
-                catch (Exception e)
-                {
-                    //TODO: Add logging information about exception
-                    Debug.Write(e.Message);
-                    return null;
-                }
+                actors.Add(actor);
+                lastActorId++;
+                return actor;
             }
-
-            return null;
+            return actor;
         }
-        
+
         public RetroShooterGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -156,7 +148,11 @@ namespace RetroShooter
             IsMouseVisible = true;
           
         }
-
+        
+        public int LastActorId
+        {
+            get => lastActorId;
+        }
         protected override void Initialize()
         {
             base.Initialize();
@@ -165,6 +161,14 @@ namespace RetroShooter
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            AddActor(new Wall("wall", LastActorId, this,null));
+            currentCamera = AddActor(new Camera("camera", LastActorId, this));
+            
+            foreach (Actor actor in actors)
+            {
+                actor.Init();
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -173,13 +177,21 @@ namespace RetroShooter
                 Exit();
 
             base.Update(gameTime);
+            
+            foreach (Actor actor in actors)
+            {
+                actor.Update(0);
+            }
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            
+            foreach (Actor actor in actors)
+            {
+                actor.Draw(0);
+            }
             _spriteBatch.Begin();
             
             _spriteBatch.End();
