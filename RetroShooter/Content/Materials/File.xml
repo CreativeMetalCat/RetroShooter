@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent >
+  <Asset Type="DataTypes.Material">
+    <EffectName>Effects/TestEffect</EffectName>
+    <TextureName>Textures/T_Bricks</TextureName> 
+  </Asset>
+</XnaContent>

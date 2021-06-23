@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroShooter.Engine;
 using RetroShooter.Engine.Camera;
+using RetroShooter.Engine.Material;
 
 namespace RetroShooter
 {
@@ -164,8 +165,6 @@ namespace RetroShooter
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
-           
         }
 
         protected override void Update(GameTime gameTime)

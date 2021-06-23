@@ -1,10 +1,17 @@
 ﻿
+using System.Collections.Generic;
+
 namespace DataTypes
 {
-    class Material
+    /**
+     * This class defines basic values that are commonly used by all shaders(effects)
+     * 
+     */
+    public class Material
     {
-        public int someValue;
-
-        public string someString;
+        public string EffectName = "BasicEffect";
+        
+        public string TextureName = "null";
     }
+    
 }

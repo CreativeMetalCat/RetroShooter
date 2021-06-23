@@ -9,5 +9,21 @@ namespace RetroShooter.Engine.Components
     public class StaticMeshRenderComponent
     {
         public Model Model;
+
+        void Draw(float deltaTime)
+        {
+            if (Model != null)
+            {
+                foreach (var mesh in Model.Meshes)
+                {
+                    foreach (var meshPart in mesh.MeshParts)
+                    {
+                        
+                    }
+                    mesh.Draw();
+                }
+            }
+        }
+        
     }
 }

@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\DataTypes\bin\Release\netstandard2.0\DataTypes.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -17,7 +18,16 @@
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
+/processorParam:Defines=
 /build:Effects/TestEffect.fx
+
+#begin Materials/BaseMaterial.mat
+/copy:Materials/BaseMaterial.mat
+
+#begin Materials/BaseMaterial.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Materials/BaseMaterial.xml
 
 #begin Models/Floor_400x400.FBX
 /importer:FbxImporter
