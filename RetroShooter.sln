@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetroShooter", "RetroShooter\RetroShooter.csproj", "{F3050698-4D16-4BBB-871F-FF5B6DEB7BFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTypes", "DataTypes\DataTypes.csproj", "{535F5D6B-21BE-4ED9-A709-42C626A047C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{F3050698-4D16-4BBB-871F-FF5B6DEB7BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3050698-4D16-4BBB-871F-FF5B6DEB7BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3050698-4D16-4BBB-871F-FF5B6DEB7BFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{535F5D6B-21BE-4ED9-A709-42C626A047C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{535F5D6B-21BE-4ED9-A709-42C626A047C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{535F5D6B-21BE-4ED9-A709-42C626A047C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{535F5D6B-21BE-4ED9-A709-42C626A047C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
