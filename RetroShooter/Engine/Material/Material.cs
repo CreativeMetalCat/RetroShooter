@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -14,19 +15,6 @@ namespace RetroShooter.Engine.Material
      */
     public class Material
     {
-        public struct MatVariable
-        {
-            public string Name;
-            public object Variable;
-
-            public MatVariable(string _name, object variable)
-            {
-                Name = _name ?? throw new NullReferenceException(nameof(Name) + ". All effect parameters MUST NOT be null");
-                Variable = variable ?? throw new NullReferenceException(nameof(variable)+". All effect parameters MUST NOT be null");
-            }
-
-        }
-        
         public List<MatVariable> Variables = new List< MatVariable>();
 
         private Effect _effect;
@@ -35,6 +23,9 @@ namespace RetroShooter.Engine.Material
         {
             get => _effect;
         }
+        /**
+         * Loads all of the nessesary data from .mat file and stores it
+         */
         public void Load(string materialName, RetroShooterGame game)
         {
             XmlDocument doc = new XmlDocument();
@@ -85,5 +76,73 @@ namespace RetroShooter.Engine.Material
                 _effect = new BasicEffect(game.GraphicsDevice);
             }
         }
+
+        /**
+         * Applies all of the loaded data
+         */
+        public void Apply(RetroShooterGame game,Matrix objectTransform)
+        {
+            //set basic values
+            _effect.Parameters["World"]?.SetValue(game.CurrentCamera.WorldMatrix * objectTransform);
+            _effect.Parameters["View"]?.SetValue(game.CurrentCamera.ViewMatrix);
+            _effect.Parameters["Projection"]?.SetValue(game.CurrentCamera.ProjectionMatrix);
+
+            foreach (MatVariable variable in Variables)
+            {
+                switch (variable.Type)
+                {
+                    case BasicVariableTypes.Bool:
+                        _effect.Parameters[variable.Name].SetValue(variable.BoolValue);
+                        break;
+                    case BasicVariableTypes.FloatArray:
+                        _effect.Parameters[variable.Name].SetValue(variable.FloatArrayValue);
+                        break;
+                    case BasicVariableTypes.Float:
+                        _effect.Parameters[variable.Name].SetValue(variable.FloatValue);
+                        break;
+                    case BasicVariableTypes.Int:
+                        _effect.Parameters[variable.Name].SetValue(variable.IntValue);
+                        break;
+                    case BasicVariableTypes.IntArray:
+                        _effect.Parameters[variable.Name].SetValue(variable.IntArrayValue);
+                        break;
+                    case BasicVariableTypes.Quaternion:
+                        _effect.Parameters[variable.Name].SetValue(variable.QuaternionValue);
+                        break;
+                    case BasicVariableTypes.Texture:
+                        _effect.Parameters[variable.Name].SetValue(variable.TextureValue);
+                        break;
+                    case BasicVariableTypes.Matrix:
+                        _effect.Parameters[variable.Name].SetValue(variable.MatrixValue);
+                        break;
+                    case BasicVariableTypes.MatrixArray:
+                        _effect.Parameters[variable.Name].SetValue(variable.MatrixArrayValue);
+                        break;
+                    case BasicVariableTypes.Vector2:
+                        _effect.Parameters[variable.Name].SetValue(variable.Vector2Value);
+                        break;
+                    case BasicVariableTypes.Vector2Array:
+                        _effect.Parameters[variable.Name].SetValue(variable.Vector2ArrayValue);
+                        break;
+                    case BasicVariableTypes.Vector3Array:
+                        _effect.Parameters[variable.Name].SetValue(variable.Vector3ArrayValue);
+                        break;
+                    case BasicVariableTypes.Vector4:
+                        _effect.Parameters[variable.Name].SetValue(variable.Vector4Value);
+                        break;
+                    case BasicVariableTypes.Vector4Array:
+                        _effect.Parameters[variable.Name].SetValue(variable.Vector4ArrayValue);
+                        break;
+                    case BasicVariableTypes.Vector3:
+                        _effect.Parameters[variable.Name].SetValue(variable.Vector3Value);
+                        break;
+                    default:
+                        _effect.Parameters[variable.Name].SetValue(variable.BoolValue);
+                        break;
+                }
+                
+            }
+        }
+        
     }
 }
