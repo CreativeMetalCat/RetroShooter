@@ -101,6 +101,12 @@ namespace RetroShooter
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        protected SpriteFont defaultFont;
+        
+        public SpriteFont DefaultFont
+        {
+            get => defaultFont;
+        }
         public GraphicsDevice GraphicsDevice => _graphics.GraphicsDevice;
         
         /**
@@ -162,7 +168,9 @@ namespace RetroShooter
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
+            defaultFont = Content.Load<SpriteFont>("bebas_neue");
+                
             AddActor(new Wall("wall", LastActorId, this,null));
             currentCamera = AddActor(new TestCamera("camera", LastActorId, this));
             
@@ -193,6 +201,10 @@ namespace RetroShooter
             {
                 actor.Draw(1);
             }
+            
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(defaultFont,"test",Vector2.Zero,Color.Cyan );
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

@@ -21,6 +21,13 @@
 /processorParam:Defines=
 /build:Effects/TestEffect.fx
 
+#begin File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:File.spritefont;bebas_neue.spritefont
+
 #begin Materials/BaseMaterial.mat
 /copy:Materials/BaseMaterial.mat
 
