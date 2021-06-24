@@ -33,6 +33,7 @@ namespace RetroShooter.Shooter
                 location.X -= 1 * deltaTime;
                 Target.X -= 1 * deltaTime;
             }
+            game.AddDebugMessage(location.ToString(),0,Color.Crimson);
         }
     }
 }

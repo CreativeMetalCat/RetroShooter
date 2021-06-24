@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroShooter.Engine;
@@ -12,90 +11,6 @@ using RetroShooter.Shooter;
 
 namespace RetroShooter
 {
-
-    public class Test3D
-    {
-        //Camera
-        public Vector3 camTarget;
-        public Vector3 camPosition;
-        public Matrix projectionMatrix;
-        public Matrix viewMatrix;
-        public Matrix worldMatrix;
-
-        private Model model;
-        
-        //BasicEffect for rendering
-        Effect basicEffect;
-        
-        //Geometric info
-        VertexPositionColor[] triangleVertices;
-        VertexBuffer vertexBuffer;
-
-        public void Init(GraphicsDevice graphicsDevice)
-        {
-            
-            //Setup Camera
-            camTarget = new Vector3(0f, 0f, 0f);
-            camPosition = new Vector3(0f, 0f, -100f);
-            
-            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(
-                MathHelper.ToRadians(45f), 
-                graphicsDevice.DisplayMode.AspectRatio,
-                1f, 1000f);
-            
-            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, 
-                new Vector3(0f, 1f, 0f));// Y up
-            
-            worldMatrix = Matrix.CreateWorld(camTarget, Vector3.
-                Forward, Vector3.Up);
-            
-            
-            
-            
-           
-        }
-
-        public void LoadContent(GraphicsDevice graphicsDevice, ContentManager contentManager)
-        {
-            //BasicEffect
-            basicEffect = contentManager.Load<Effect>("Effects/TestEffect");
-
-
-            basicEffect.Parameters["BaseTexture"].SetValue(contentManager.Load<Texture2D>("Textures/T_Bricks"));
-
-
-
-            model = contentManager.Load<Model>("Models/SM_Chair");
-            //Vert buffer
-            vertexBuffer = model.Meshes[0].MeshParts[0].VertexBuffer; /*new VertexBuffer(graphicsDevice, typeof(
-                VertexPositionColor), 3, BufferUsage.
-                WriteOnly);*/
-        }
-
-        public void Draw(GameTime gameTime,GraphicsDevice graphicsDevice)
-        {
-            /*basicEffect.Projection = projectionMatrix;
-            basicEffect.View = viewMatrix;
-            basicEffect.World = worldMatrix;*/
-            
-            graphicsDevice.SetVertexBuffer(vertexBuffer);
-
-            foreach (ModelMesh mesh in model.Meshes)
-            {
-                foreach (ModelMeshPart meshPart in model.Meshes[0].MeshParts)
-                {
-                    meshPart.Effect = basicEffect;
-                    basicEffect.Parameters["World"].SetValue(worldMatrix * mesh.ParentBone.Transform);
-                    basicEffect.Parameters["View"].SetValue(viewMatrix);
-                    basicEffect.Parameters["Projection"].SetValue(projectionMatrix);
-
-                }
-                mesh.Draw();
-            }
-        }
-        
-    }
-    
     public class RetroShooterGame : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -118,6 +33,11 @@ namespace RetroShooter
             set => currentCamera = value;
         }
 
+        public void AddDebugMessage(string msg,float duration= default,Color color = default)
+        {
+            debugOutput.Add(new DebugMessage(msg,duration,color));
+        }
+
         protected Camera currentCamera;
         
         /**
@@ -131,6 +51,7 @@ namespace RetroShooter
          */
         protected List<Engine.Actor> actors = new List<Actor>();
 
+        protected List<DebugMessage> debugOutput = new List<DebugMessage>();
         /**
          * Adds actor to the world.
          * If name is already taken or any other error occured => returns null and doesn't add actor
@@ -202,8 +123,26 @@ namespace RetroShooter
                 actor.Draw(1);
             }
             
+            AddDebugMessage(gameTime.ElapsedGameTime.Milliseconds.ToString(),0,Color.Blue);
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(defaultFont,"test",Vector2.Zero,Color.Cyan );
+            if (debugOutput.Count > 0)
+            {
+                for (int i = 0; i < debugOutput.Count; i++)
+                {
+                    _spriteBatch.DrawString(defaultFont, debugOutput[i].Message, new Vector2(0, i * 12), debugOutput[i].Color);
+                    debugOutput[i].CurrentLifeTime += gameTime.ElapsedGameTime.Milliseconds;
+                }
+
+                for (int i = debugOutput.Count - 1; i >= 0; i--)
+                {
+                    if (debugOutput[i].CurrentLifeTime > debugOutput[i].Duration)
+                    {
+                        debugOutput.Remove(debugOutput[i]);
+                    }
+                }
+                debugOutput.Clear();
+            }
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
