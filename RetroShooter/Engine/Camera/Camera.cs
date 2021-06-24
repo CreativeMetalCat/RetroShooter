@@ -24,9 +24,9 @@ namespace RetroShooter.Engine.Camera
 
         public Matrix ProjectionMatrix => projectionMatrix;
 
-        public Matrix ViewMatrix => Matrix.CreateLookAt(Location,Target,Vector3.Up);
+        public Matrix ViewMatrix => Matrix.CreateLookAt(location - new Vector3(0, 0, 5), Target , Vector3.Up);
 
-        public Matrix WorldMatrix => worldMatrix;
+        public Matrix WorldMatrix => Matrix.CreateWorld(Target, Vector3.Forward, Vector3.Up);
 
         public override void Init()
         {

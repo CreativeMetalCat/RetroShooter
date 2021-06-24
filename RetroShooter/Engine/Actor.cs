@@ -14,11 +14,11 @@ namespace RetroShooter.Engine
         /**
          * Location
          */
-        private Vector3 location;
+        protected Vector3 location;
 
-        private Vector3 rotation;
+        protected Vector3 rotation;
 
-        private Vector3 scale;
+        protected Vector3 scale;
 
         /**
          * Game is the class that handles all of the updates

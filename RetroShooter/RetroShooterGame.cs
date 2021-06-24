@@ -147,6 +147,7 @@ namespace RetroShooter
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
           
+            
         }
         
         public int LastActorId
@@ -163,7 +164,7 @@ namespace RetroShooter
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
             AddActor(new Wall("wall", LastActorId, this,null));
-            currentCamera = AddActor(new Camera("camera", LastActorId, this));
+            currentCamera = AddActor(new TestCamera("camera", LastActorId, this));
             
             foreach (Actor actor in actors)
             {
@@ -180,7 +181,7 @@ namespace RetroShooter
             
             foreach (Actor actor in actors)
             {
-                actor.Update(0);
+                actor.Update(1);
             }
         }
 
@@ -190,11 +191,8 @@ namespace RetroShooter
 
             foreach (Actor actor in actors)
             {
-                actor.Draw(0);
+                actor.Draw(1);
             }
-            _spriteBatch.Begin();
-            
-            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
