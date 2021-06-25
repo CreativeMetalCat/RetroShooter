@@ -158,7 +158,7 @@ namespace RetroShooter
                             debugOutput.Remove(debugOutput[i]);
                         }
                     }
-                    debugOutput.Clear();
+                   
                 }
             }
             catch (System.ArgumentException e)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,8 +11,15 @@ namespace RetroShooter.Engine.Components
      */
     public class StaticMeshRenderComponent : Component
     {
+        enum LoadType
+        {
+            None,
+            Material,
+            File
+        }
         /*
          * Used when this component has to load model manually instead of using given model
+         * Also used as filename is LoadType is File
          */
         private string _materialName;
         
@@ -19,11 +27,13 @@ namespace RetroShooter.Engine.Components
 
         protected Material.Material material;
 
+        private LoadType _loadType;
         public StaticMeshRenderComponent(string name, Actor owner , Model model = null,
             Material.Material material = null) : base(name, owner)
         {
             Model = model ?? throw new ArgumentNullException(nameof(model));
             this.material = material ?? throw new ArgumentNullException(nameof(material));
+            _loadType = LoadType.None;
         }
         
         public StaticMeshRenderComponent(string name, Actor owner , string modelName,
@@ -32,12 +42,33 @@ namespace RetroShooter.Engine.Components
             Model = owner.Game.Content.Load<Model>(modelName);
             this.material = new Material.Material();
             _materialName = materialName;
+            _loadType = LoadType.Material;
+        }
+
+        /*
+         * Loads model from file(.mod file)
+         */
+        public StaticMeshRenderComponent(string name, Actor owner, string assetName): base(name,owner)
+        {
+            _loadType = LoadType.File;
+            _materialName = assetName ?? throw  new NullReferenceException("Model file path is null");
         }
 
         public override void Init()
         {
             base.Init();
-            material.Load(_materialName,Owner.Game);
+            switch (_loadType)
+            {
+                case LoadType.Material:
+                    material.Load(_materialName,Owner.Game);
+                    break;
+                case LoadType.File:
+                    Mesh.MeshData data = Mesh.Load(_materialName, Owner.Game);
+                    Model = data.Model;
+                    material = data.Material;
+                    break;
+            }
+           
         }
 
         public Material.Material Material => material;
