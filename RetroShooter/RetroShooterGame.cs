@@ -51,6 +51,8 @@ namespace RetroShooter
          */
         protected List<Engine.Actor> actors = new List<Actor>();
 
+        private bool IsSpaceDown = false;
+
         protected List<DebugMessage> debugOutput = new List<DebugMessage>();
         /**
          * Adds actor to the world.
@@ -110,7 +112,17 @@ namespace RetroShooter
             
             foreach (Actor actor in actors)
             {
-                actor.Update(1);
+                actor.Update(gameTime.ElapsedGameTime.Milliseconds);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsSpaceDown)
+            {
+                IsMouseVisible = !IsMouseVisible;
+                IsSpaceDown = true;
+            }
+            else if (Keyboard.GetState().IsKeyUp(Keys.Space) )
+            {
+                IsSpaceDown = false;
             }
         }
 
@@ -120,28 +132,41 @@ namespace RetroShooter
 
             foreach (Actor actor in actors)
             {
-                actor.Draw(1);
+                actor.Draw(gameTime.ElapsedGameTime.Milliseconds);
             }
             
             AddDebugMessage(gameTime.ElapsedGameTime.Milliseconds.ToString(),0,Color.Blue);
-            _spriteBatch.Begin();
-            if (debugOutput.Count > 0)
+            if (!IsMouseVisible)
             {
-                for (int i = 0; i < debugOutput.Count; i++)
+                AddDebugMessage("Mouse is hidden. Press SPACEBAR to show mouse",0,Color.Azure);
+            }
+            _spriteBatch.Begin();
+            try
+            {
+                if (debugOutput.Count > 0)
                 {
-                    _spriteBatch.DrawString(defaultFont, debugOutput[i].Message, new Vector2(0, i * 12), debugOutput[i].Color);
-                    debugOutput[i].CurrentLifeTime += gameTime.ElapsedGameTime.Milliseconds;
-                }
-
-                for (int i = debugOutput.Count - 1; i >= 0; i--)
-                {
-                    if (debugOutput[i].CurrentLifeTime > debugOutput[i].Duration)
+                    for (int i = 0; i < debugOutput.Count; i++)
                     {
-                        debugOutput.Remove(debugOutput[i]);
+                        _spriteBatch.DrawString(defaultFont, debugOutput[i].Message, new Vector2(0, i * 12), debugOutput[i].Color);
+                        debugOutput[i].CurrentLifeTime += gameTime.ElapsedGameTime.Milliseconds;
                     }
+
+                    for (int i = debugOutput.Count - 1; i >= 0; i--)
+                    {
+                        if (debugOutput[i].CurrentLifeTime > debugOutput[i].Duration)
+                        {
+                            debugOutput.Remove(debugOutput[i]);
+                        }
+                    }
+                    debugOutput.Clear();
                 }
+            }
+            catch (System.ArgumentException e)
+            {
+                _spriteBatch.DrawString(defaultFont, "Debug output error: Attempted to draw illegal characters", Vector2.Zero, Color.Red);
                 debugOutput.Clear();
             }
+            
 
             _spriteBatch.End();
 

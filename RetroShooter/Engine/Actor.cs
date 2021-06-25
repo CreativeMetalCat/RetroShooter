@@ -88,35 +88,35 @@ namespace RetroShooter.Engine
         /**
          * Location
          */
-        public Vector3 Location
+        public virtual Vector3 Location
         {
             get => location + (owner?.location ?? Vector3.Zero);
             set => location = value;
         }
 
-        public Vector3 Rotation
+        public virtual Vector3 Rotation
         {
             get => rotation+ (owner?.rotation ?? Vector3.Zero);
             set => rotation = value;
         }
 
-        public Vector3 Scale
+        public virtual Vector3 Scale
         {
             get => scale + (owner?.scale ?? Vector3.Zero);
             set => scale = value;
         }
 
-        public Vector3 ForwardVector
+        public virtual Vector3 ForwardVector
         {
             get => new Vector3
             (
-                MathF.Cos(rotation.Y) * MathF.Sin(rotation.X),
-                MathF.Sin(rotation.Y),
-                MathF.Cos(rotation.Y) * MathF.Sin(rotation.X)
+                (MathF.Cos(MathHelper.ToRadians(rotation.Y)) * MathF.Sin(MathHelper.ToRadians(rotation.X))),
+                MathF.Sin(MathHelper.ToRadians(rotation.Y)),
+                (MathF.Cos(MathHelper.ToRadians(rotation.Y)) * MathF.Sin(MathHelper.ToRadians(rotation.X)))
             );
         }
 
-        public Vector3 RightVector
+        public virtual Vector3 RightVector
         {
             get => new Vector3
             (
