@@ -68,7 +68,7 @@ namespace RetroShooter.Engine.Components
                     material = data.Material;
                     break;
             }
-           
+            
         }
 
         public Material.Material Material => material;
