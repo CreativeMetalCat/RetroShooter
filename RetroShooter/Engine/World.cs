@@ -13,16 +13,6 @@ namespace RetroShooter.Engine
      */
     public class World
     {
-        private static float[] VectorStringToArray(string vecString)
-        {
-            return  vecString.Split(" ").Select(x => float.Parse(x)).ToArray();
-        }
-
-        private static Vector3 VectorStringToVec3(string vecString)
-        {
-            float[] vecStr = VectorStringToArray(vecString);
-            return new Vector3(vecStr[0],vecStr[1],vecStr[2]);
-        }
 
         public static List<Actor> LoadWorld(string filename,RetroShooterGame game)
         {
@@ -40,23 +30,39 @@ namespace RetroShooter.Engine
                     {
                         string type = node.Attributes["type"]?.InnerText ??
                                       throw new NullReferenceException("Level file has actor with missing type");
+                        
+                        string name = node.Attributes["name"]?.InnerText ??
+                                      throw new NullReferenceException("Level file has actor with missing name");
 
     
-                        Vector3 location = VectorStringToVec3(node["Location"]?.InnerText);
-                        Vector3 rotation = VectorStringToVec3(node["Rotation"]?.InnerText);
+                        Vector3 location = Helpers.XmlHelpers.VectorStringToVec3(node["Location"]?.InnerText);
+                        Vector3 rotation =  Helpers.XmlHelpers.VectorStringToVec3(node["Rotation"]?.InnerText);
                         
-                        //TODO: Note: Ideally each class should be able to load itself from the XmlNode given to it
-                        //so when this loading happens, it just finds class with this name, calls that function, tells who are their parent and moves on to the next one
-                        switch (type)
+                        //Possibly very slow, but it allows to avoid hardcoding every class into the world loader
+                        var actorType = Type.GetType(type);
+                        if (actorType != null)
                         {
-                            //TODO:Add other basic type loading
-                            case "Wall":
-                                result.Add(
-                                    game.AddActor(new RetroShooter.Shooter.Wall(
-                                    node.Attributes["name"].InnerText, game.LastActorId,
-                                    game, null,location,rotation))
-                                );
-                                break;
+                            try
+                            {
+                                var actor = Activator.CreateInstance(actorType, node, name) ??
+                                            throw new NullReferenceException("Failed to create actor of type. Type:" +
+                                                                             type);
+                                result.Add(game?.AddActor(actor as Actor));
+                            }
+                            catch (MethodAccessException e)
+                            {
+                                game?.AddDebugMessage(
+                                    "Actor of this type has inaccessible constructor with needed arguments. Given type: " +
+                                    type,5f,Color.Yellow);
+                            }
+                            catch (NullReferenceException e)
+                            {
+                                game?.AddDebugMessage(e.Message,5f,Color.Yellow);
+                            }
+                        }
+                        else
+                        {
+                            game?.AddDebugMessage("Failed to find type of actor. Given type: " + type,5f,Color.Yellow);
                         }
                     }
                     catch (NullReferenceException e)

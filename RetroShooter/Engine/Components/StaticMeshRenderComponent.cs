@@ -75,10 +75,10 @@ namespace RetroShooter.Engine.Components
 
         public override void Draw(float deltaTime)
         {
-            Model.Root.Transform = Owner.TransformMatrix;
-            
             if (Model != null && material != null)
             {
+                Model.Root.Transform = Owner.TransformMatrix;
+                Owner?.Game?.AddDebugMessage(Model.Root.Transform.Translation.ToString(),0,Color.Aqua);
                 foreach (var mesh in Model.Meshes)
                 {
                     foreach (var meshPart in mesh.MeshParts)
@@ -88,6 +88,10 @@ namespace RetroShooter.Engine.Components
                     }
                     mesh.Draw();
                 }
+            }
+            else
+            {
+                Owner?.Game?.AddDebugMessage("StaticMeshComponent Error! Model is null!", 0, Color.Red);
             }
         }
         
