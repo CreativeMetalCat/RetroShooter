@@ -3,11 +3,15 @@
     <Actors>
         <Actor name = "wall" type="Wall" >
             <Location>0 40 0</Location>
-            <Rotation>0 0 90</Rotation>
+            <Rotation>0 90 0</Rotation>
         </Actor>
         <Actor name = "wall2" type="Wall" >
             <Location>0 400 0</Location>
-            <Rotation>0 0 0</Rotation>
+            <Rotation>45 0 0</Rotation>
+        </Actor>
+         <Actor name = "wall3" type="Wall" >
+            <Location>0 0 200</Location>
+            <Rotation>0 80 0</Rotation>
         </Actor>
     </Actors>
 </Level>

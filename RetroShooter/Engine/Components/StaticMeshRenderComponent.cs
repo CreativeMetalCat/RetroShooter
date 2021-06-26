@@ -75,6 +75,23 @@ namespace RetroShooter.Engine.Components
 
         public override void Draw(float deltaTime)
         {
+            float cosPitch = MathF.Cos(MathHelper.ToRadians(Owner.Rotation.X));
+            float sinPitch = MathF.Sin(MathHelper.ToRadians(Owner.Rotation.X));
+
+            float cosYaw = MathF.Cos(MathHelper.ToRadians(Owner.Rotation.Y));
+            float sinYaw = MathF.Sin(MathHelper.ToRadians(Owner.Rotation.Y));
+            Vector3 xAxis = new Vector3(cosYaw, 0, -sinYaw);
+            Vector3 yAxis = new Vector3(sinYaw * sinPitch, cosPitch, cosYaw * sinPitch);
+            Vector3 zAxis = new Vector3(sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw);
+
+            Model.Root.Transform = new Matrix
+            (
+                new Vector4(xAxis.X,yAxis.X,zAxis.X,0),
+                new Vector4(xAxis.Y,yAxis.Y,zAxis.Y,0),
+                new Vector4(xAxis.Z,yAxis.Z,zAxis.Z,0),
+                new Vector4(-Vector3.Dot(xAxis,Owner.Location),-Vector3.Dot(yAxis,Owner.Location),-Vector3.Dot(zAxis,Owner.Location),1)
+            );
+            
             if (Model != null && material != null)
             {
                 foreach (var mesh in Model.Meshes)
