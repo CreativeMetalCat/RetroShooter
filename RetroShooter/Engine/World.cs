@@ -11,7 +11,7 @@ namespace RetroShooter.Engine
     /**
      * Class responsible for loading level layouts
      */
-    public class World
+    public static class World
     {
 
         public static List<Actor> LoadWorld(string filename,RetroShooterGame game)
