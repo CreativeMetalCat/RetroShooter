@@ -36,7 +36,6 @@ namespace RetroShooter.Engine.Camera
 
                 float cosYaw = MathF.Cos(MathHelper.ToRadians(rotation.Y));
                 float sinYaw = MathF.Sin(MathHelper.ToRadians(rotation.Y));
-
                 Vector3 xAxis = new Vector3(cosYaw, 0, -sinYaw);
                 Vector3 yAxis = new Vector3(sinYaw * sinPitch, cosPitch, cosYaw * sinPitch);
                 Vector3 zAxis = new Vector3(sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw);

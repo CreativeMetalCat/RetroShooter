@@ -100,6 +100,8 @@ namespace RetroShooter.Engine.Material
                 _effect.Parameters["World"]?.SetValue(game.CurrentCamera.WorldMatrix * objectTransform);
                 _effect.Parameters["View"]?.SetValue(game.CurrentCamera.ViewMatrix);
                 _effect.Parameters["Projection"]?.SetValue(game.CurrentCamera.ProjectionMatrix);
+                _effect.Parameters["WorldInverseTranspose"]
+                    ?.SetValue(Matrix.Transpose(Matrix.Invert(game.CurrentCamera.WorldMatrix * objectTransform)));
 
                 foreach (MatVariable variable in Variables)
                 {

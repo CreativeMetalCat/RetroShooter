@@ -129,7 +129,12 @@ namespace RetroShooter
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
+            
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
+            
             foreach (Actor actor in actors)
             {
                 actor.Draw(gameTime.ElapsedGameTime.Milliseconds);

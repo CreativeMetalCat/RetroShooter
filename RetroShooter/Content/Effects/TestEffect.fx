@@ -30,6 +30,7 @@ struct VertexShaderInput
 	float4 Position : POSITION0;
 	float4 Color : COLOR0;
 	float2 TextureCoordinate:TEXCOORD0;
+	float4 Normal:NORMAL0;
 };
 
 struct VertexShaderOutput
@@ -45,8 +46,10 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 	float4 worldPosition = mul(input.Position, World);
     float4 viewPosition = mul(worldPosition, View);
+	output.Position = mul(viewPosition,Projection);
 
-	output.Position = mul(viewPosition, Projection);
+	float4 normal = mul(input.Normal,WorldInverseTranspose);
+	
 	//output.Position = mul(input.Position, WorldViewProjection);
 	output.Color = float4(1,1,1,1);
 
