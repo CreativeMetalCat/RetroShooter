@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Level name="test" version = "0.0.1">
+    <Actors>
+        <Actor name = "wall" type="Wall" >
+            <Location>0 40 0</Location>
+            <Rotation>0 0 90</Rotation>
+        </Actor>
+        <Actor name = "wall2" type="Wall" >
+            <Location>0 400 0</Location>
+            <Rotation>0 0 0</Rotation>
+        </Actor>
+    </Actors>
+</Level>

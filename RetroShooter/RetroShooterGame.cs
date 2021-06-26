@@ -97,6 +97,8 @@ namespace RetroShooter
             AddActor(new Wall("wall", LastActorId, this,null));
             currentCamera = AddActor(new TestCamera("camera", LastActorId, this));
             
+            World.LoadWorld("Levels/test", this);
+            
             foreach (Actor actor in actors)
             {
                 actor.Init();
@@ -153,7 +155,7 @@ namespace RetroShooter
                     for (int i = 0; i < debugOutput.Count; i++)
                     {
                         _spriteBatch.DrawString(defaultFont, debugOutput[i].Message, new Vector2(0, i * 12), debugOutput[i].Color);
-                        debugOutput[i].CurrentLifeTime += gameTime.ElapsedGameTime.Milliseconds;
+                        debugOutput[i].CurrentLifeTime += gameTime.ElapsedGameTime.Milliseconds / 1000f;
                     }
 
                     for (int i = debugOutput.Count - 1; i >= 0; i--)

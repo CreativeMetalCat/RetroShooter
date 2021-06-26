@@ -12,7 +12,7 @@ namespace RetroShooter.Shooter
             AddComponent<StaticMeshRenderComponent>(new StaticMeshRenderComponent
                 ("Wall",
                     this,
-                    "SM_Chair")
+                    "SM_Wall_400x400")
             );
         }
         
@@ -21,7 +21,7 @@ namespace RetroShooter.Shooter
             AddComponent<StaticMeshRenderComponent>(new StaticMeshRenderComponent
                 ("Wall",
                     this,
-                    "SM_Chair")
+                    "SM_Wall_400x400")
             );
         }
     }

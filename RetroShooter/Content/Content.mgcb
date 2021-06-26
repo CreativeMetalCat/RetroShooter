@@ -28,6 +28,9 @@
 /processorParam:TextureFormat=Compressed
 /build:File.spritefont;bebas_neue.spritefont
 
+#begin Levels/test.lvl
+/copy:Levels/test.lvl
+
 #begin Materials/BaseMaterial.mat
 /copy:Materials/BaseMaterial.mat
 
@@ -124,6 +127,9 @@
 #begin Models/SM_Table.mod
 /copy:Models/SM_Table.mod
 
+#begin Models/SM_Wall_400x400.mod
+/copy:Models/SM_Wall_400x400.mod
+
 #begin Models/Wall_400x400.FBX
 /importer:FbxImporter
 /processor:ModelProcessor
@@ -162,8 +168,8 @@
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
+/processorParam:ResizeToPowerOfTwo=True
+/processorParam:MakeSquare=True
 /processorParam:TextureFormat=Color
 /build:Textures/T_Bricks.png
 
