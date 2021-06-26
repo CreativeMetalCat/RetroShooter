@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Level name="test" version = "0.0.1">
     <Actors>
-        <Actor name = "wall" type="Wall" >
+        <Actor name = "wall" type="RetroShooter.Shooter.Wall" >
             <Location>0 40 0</Location>
             <Rotation>0 90 0</Rotation>
         </Actor>
-        <Actor name = "wall2" type="Wall" >
+        <Actor name = "wall2" type="RetroShooter.Shooter.Wall" >
             <Location>0 400 0</Location>
             <Rotation>45 0 0</Rotation>
         </Actor>
-         <Actor name = "wall3" type="Wall" >
+         <Actor name = "wall3" type="RetroShooter.Shooter.Wall" >
             <Location>0 0 200</Location>
             <Rotation>0 80 0</Rotation>
         </Actor>

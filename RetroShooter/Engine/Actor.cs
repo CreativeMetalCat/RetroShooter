@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using System.Xml;
 using Microsoft.Xna.Framework;
 
 namespace RetroShooter.Engine
@@ -55,6 +56,22 @@ namespace RetroShooter.Engine
             this.scale = scale;
             this.game = game ?? throw new ArgumentNullException(nameof(game));
             this.id = id;
+        }
+
+        /**
+         * This is constructor for reading data from .lvl files(which use xml)
+         */
+        public Actor(XmlNode xmlNode,string name,RetroShooterGame game) : base(name)
+        {
+            this.game = game;
+            if (xmlNode["Location"] != null)
+            {
+                Location = Helpers.XmlHelpers.VectorStringToVec3(xmlNode["Location"].InnerText);
+            }
+            if (xmlNode["Rotation"] != null)
+            {
+               Rotation = Helpers.XmlHelpers.VectorStringToVec3(xmlNode["Rotation"].InnerText);
+            }
         }
 
         /*
@@ -214,6 +231,7 @@ namespace RetroShooter.Engine
                 component?.Draw(deltaTime);
             }
         }
+        
         
     }
 }

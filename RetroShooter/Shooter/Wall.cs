@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Xml;
+using Microsoft.Xna.Framework;
 using RetroShooter.Engine;
 using RetroShooter.Engine.Components;
 
@@ -17,6 +18,15 @@ namespace RetroShooter.Shooter
         }
         
         public Wall(string name, int id, RetroShooterGame game,Actor owner = null) : base(name, id, game, Vector3.Zero, Vector3.Zero, Vector3.One, owner)
+        {
+            AddComponent<StaticMeshRenderComponent>(new StaticMeshRenderComponent
+                ("Wall",
+                    this,
+                    "SM_Wall_400x400")
+            );
+        }
+
+        public Wall(XmlNode node, string name,RetroShooterGame game) : base(node, name,game)
         {
             AddComponent<StaticMeshRenderComponent>(new StaticMeshRenderComponent
                 ("Wall",
