@@ -61,15 +61,16 @@ namespace RetroShooter.Engine
         /**
          * This is constructor for reading data from .lvl files(which use xml)
          */
-        public Actor(XmlNode xmlNode,string name) : base(name)
+        public Actor(XmlNode xmlNode,string name,RetroShooterGame game) : base(name)
         {
+            this.game = game;
             if (xmlNode["Location"] != null)
             {
                 Location = Helpers.XmlHelpers.VectorStringToVec3(xmlNode["Location"].InnerText);
             }
             if (xmlNode["Rotation"] != null)
             {
-                Location = Helpers.XmlHelpers.VectorStringToVec3(xmlNode["Rotation"].InnerText);
+               Rotation = Helpers.XmlHelpers.VectorStringToVec3(xmlNode["Rotation"].InnerText);
             }
         }
 

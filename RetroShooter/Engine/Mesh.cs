@@ -30,6 +30,7 @@ namespace RetroShooter.Engine
                              throw new NullReferenceException (
                                  "Model file contains reference to non-existent model. Given path:" +
                                  modelName.InnerText);
+                
                 XmlNode matDataNode = doc.DocumentElement.SelectSingleNode("/Model/Materials") ?? throw new NullReferenceException(
                     "Model file does not contain material info");
                 

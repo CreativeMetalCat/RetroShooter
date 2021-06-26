@@ -26,7 +26,7 @@ namespace RetroShooter.Shooter
             );
         }
 
-        public Wall(XmlNode node, string name) : base(node, name)
+        public Wall(XmlNode node, string name,RetroShooterGame game) : base(node, name,game)
         {
             AddComponent<StaticMeshRenderComponent>(new StaticMeshRenderComponent
                 ("Wall",

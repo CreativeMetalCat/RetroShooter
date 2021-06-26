@@ -44,7 +44,7 @@ namespace RetroShooter.Engine
                         {
                             try
                             {
-                                var actor = Activator.CreateInstance(actorType, node, name) ??
+                                var actor = Activator.CreateInstance(actorType, node, name,game) ??
                                             throw new NullReferenceException("Failed to create actor of type. Type:" +
                                                                              type);
                                 result.Add(game?.AddActor(actor as Actor));
@@ -53,21 +53,21 @@ namespace RetroShooter.Engine
                             {
                                 game?.AddDebugMessage(
                                     "Actor of this type has inaccessible constructor with needed arguments. Given type: " +
-                                    type,5f,Color.Yellow);
+                                    type,50f,Color.Yellow);
                             }
                             catch (NullReferenceException e)
                             {
-                                game?.AddDebugMessage(e.Message,5f,Color.Yellow);
+                                game?.AddDebugMessage(e.Message,50f,Color.Yellow);
                             }
                         }
                         else
                         {
-                            game?.AddDebugMessage("Failed to find type of actor. Given type: " + type,5f,Color.Yellow);
+                            game?.AddDebugMessage("Failed to find type of actor. Given type: " + type,50f,Color.Yellow);
                         }
                     }
                     catch (NullReferenceException e)
                     {
-                        game?.AddDebugMessage("Error found in level file: " + e.Message, 5f, Color.Yellow);
+                        game?.AddDebugMessage("Error found in level file: " + e.Message, 50f, Color.Yellow);
                     }
                 }
 
@@ -75,7 +75,7 @@ namespace RetroShooter.Engine
             }
             catch (Exception e)
             {
-                game?.AddDebugMessage("Failed to load level file. Error info: " + e.Message, 5f, Color.Red);
+                game?.AddDebugMessage("Failed to load level file. Error info: " + e.Message, 50f, Color.Red);
             }
 
             return new List<Actor>();
