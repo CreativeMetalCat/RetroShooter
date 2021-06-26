@@ -20,6 +20,8 @@ namespace RetroShooter.Engine
 
         protected Vector3 scale;
 
+        protected Matrix transformMatrix;
+
         /**
          * Game is the class that handles all of the updates
          */
@@ -47,12 +49,12 @@ namespace RetroShooter.Engine
         public Actor(string name , int id,RetroShooterGame game, Vector3 location = default, Vector3 rotation = default,
             Vector3 scale = default, Actor owner = null) : base(name)
         {
+            this.owner = owner;
             this.location = location;
             this.rotation = rotation;
             this.scale = scale;
             this.game = game ?? throw new ArgumentNullException(nameof(game));
             this.id = id;
-            this.owner = owner;
         }
 
         /*
@@ -88,43 +90,40 @@ namespace RetroShooter.Engine
         /**
          * Location
          */
-        public virtual Vector3 Location
+        public Vector3 Location
         {
             get => location + (owner?.location ?? Vector3.Zero);
-            set => location = value;
+            set
+            {
+                location = value;
+                RecalculateTransformMatrix();
+            }
         }
 
-        public virtual Vector3 Rotation
+        public Vector3 Rotation
         {
-            get => rotation+ (owner?.rotation ?? Vector3.Zero);
-            set => rotation = value;
+            get => rotation + (owner?.rotation ?? Vector3.Zero);
+            set
+            {
+                rotation = value;
+                RecalculateTransformMatrix();
+            }
         }
 
-        public virtual Vector3 Scale
+        public Vector3 Scale
         {
             get => scale + (owner?.scale ?? Vector3.Zero);
             set => scale = value;
         }
 
-        public virtual Vector3 ForwardVector
-        {
-            get => new Vector3
-            (
-                (MathF.Cos(MathHelper.ToRadians(rotation.Y)) * MathF.Sin(MathHelper.ToRadians(rotation.X))),
-                MathF.Sin(MathHelper.ToRadians(rotation.Y)),
-                (MathF.Cos(MathHelper.ToRadians(rotation.Y)) * MathF.Sin(MathHelper.ToRadians(rotation.X)))
-            );
-        }
+        public Vector3 ForwardVector => transformMatrix.Forward;
 
-        public virtual Vector3 RightVector
-        {
-            get => new Vector3
-            (
-                MathF.Sin(rotation.X - MathF.PI / 2f),
-                0,
-                MathF.Cos(rotation.X - MathF.PI / 2f)
-            );
-        }
+        public Vector3 RightVector => transformMatrix.Right;
+        
+        /*
+         * Transform matrix of the actor
+         */
+        public Matrix TransformMatrix => transformMatrix;
 
         /**
          * The actor that owns this actor.
@@ -146,6 +145,34 @@ namespace RetroShooter.Engine
             get => game;
         }
 
+        /*
+         * Recalculates transform matrix based on new location and rotation
+         */
+        protected void RecalculateTransformMatrix()
+        {
+                float cosPitch = MathF.Cos(MathHelper.ToRadians(Rotation.X));
+
+                float sinPitch = MathF.Sin(MathHelper.ToRadians(Rotation.X));
+
+                float cosYaw = MathF.Cos(MathHelper.ToRadians(Rotation.Y));
+                float sinYaw = MathF.Sin(MathHelper.ToRadians(Rotation.Y));
+
+                Vector3 xAxis = new Vector3(cosYaw, 0, -sinYaw);
+                Vector3 yAxis = new Vector3(sinYaw * sinPitch, cosPitch, cosYaw * sinPitch);
+                Vector3 zAxis = new Vector3(sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw);
+
+                transformMatrix = new Matrix
+                (
+                    new Vector4(xAxis.X, yAxis.X, zAxis.X, 0),
+                    new Vector4(xAxis.Y, yAxis.Y, zAxis.Y, 0),
+                    new Vector4(xAxis.Z, yAxis.Z, zAxis.Z, 0),
+                    new Vector4(-Vector3.Dot(xAxis, Location), -Vector3.Dot(yAxis, Location),
+                        -Vector3.Dot(zAxis, Location), 1)
+                );
+            
+        }
+    
+
         public override void Init()
         {
             base.Init();
@@ -158,6 +185,22 @@ namespace RetroShooter.Engine
         public override void Update(float deltaTime)
         {
             base.Update(deltaTime);
+            //should this be calculated each frame?
+            //i mean it's calculated before each frame anyway
+            /* old version of the code
+              public virtual Vector3 ForwardVector
+                {
+                get => new Vector3
+                (
+                    (MathF.Cos(MathHelper.ToRadians(rotation.Y)) * MathF.Sin(MathHelper.ToRadians(rotation.X))),
+                    MathF.Sin(MathHelper.ToRadians(rotation.Y)),
+                    (MathF.Cos(MathHelper.ToRadians(rotation.Y)) * MathF.Sin(MathHelper.ToRadians(rotation.X)))
+                 );
+                }
+             */
+
+            RecalculateTransformMatrix();
+            
             foreach (Component component in Components)
             {
                 component?.Update(deltaTime);
