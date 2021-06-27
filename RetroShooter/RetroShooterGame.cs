@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroShooter.Engine;
 using RetroShooter.Engine.Camera;
+using RetroShooter.Engine.Lighting;
 using RetroShooter.Engine.Material;
 using RetroShooter.Shooter;
 using RetroShooter.Shooter.Player;
@@ -26,7 +27,8 @@ namespace RetroShooter
             get => defaultFont;
         }
         public GraphicsDevice GraphicsDevice => _graphics.GraphicsDevice;
-        
+
+        public List<PointLight> CurrentlyActivePointLights = new List<PointLight>();
         /**
          * Current camera that is used for rendering
          */
@@ -122,6 +124,13 @@ namespace RetroShooter
             foreach (Actor actor in actors)
             {
                 actor.Update(gameTime.ElapsedGameTime.Milliseconds);
+                
+                //temporary and rather bad solution
+                //but the goal is to have lights only be in that list when they are close enough to the player
+                if (!CurrentlyActivePointLights.Contains(actor as PointLight) && actor is BaseLight)
+                {
+                    CurrentlyActivePointLights.Add(actor as PointLight);
+                }
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsSpaceDown)

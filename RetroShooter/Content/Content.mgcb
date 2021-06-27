@@ -17,7 +17,8 @@
 #begin Effects/DiffuseLightning.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
+/processorParam:Defines=
 /build:Effects/DiffuseLightning.fx
 
 #begin Effects/TestEffect.fx

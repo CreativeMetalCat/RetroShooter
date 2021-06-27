@@ -106,6 +106,27 @@ namespace RetroShooter.Engine.Material
 
                 _effect.Parameters["AmbientLightColor"]?.SetValue(game.CurrentAmbientLightColor);
 
+                //this value MUST match MAX_POINT_LIGHTS in effect used by this material
+                for (int i = 0; i < 16; i++)
+                {
+                    //this means that i is in range of the lights
+                    if (game.CurrentlyActivePointLights.Count > i)
+                    {
+                        _effect.Parameters["pointLightsColor"]?.Elements[i].SetValue(game.CurrentlyActivePointLights[i].LightColor);
+                        _effect.Parameters["pointLightsLocation"]?.Elements[i].SetValue(game.CurrentlyActivePointLights[i].Location);
+                        _effect.Parameters["pointLightsIntensity"]?.Elements[i].SetValue(game.CurrentlyActivePointLights[i].Intensity);
+                        _effect.Parameters["pointLightsValid"]?.Elements[i].SetValue(true);
+                    }
+                    //this means that i is outside of the range and that we need to place fake lights(lights that will not be calculated)
+                    else
+                    {
+                        _effect.Parameters["pointLightsColor"]?.Elements[i].SetValue(Vector4.Zero);
+                        _effect.Parameters["pointLightsLocation"]?.Elements[i].SetValue(Vector3.Zero);
+                        _effect.Parameters["pointLightsIntensity"]?.Elements[i].SetValue(0f);
+                        _effect.Parameters["pointLightsValid"]?.Elements[i].SetValue(false);
+                    }
+                }
+                
                 foreach (MatVariable variable in Variables)
                 {
                     switch (variable.Type)

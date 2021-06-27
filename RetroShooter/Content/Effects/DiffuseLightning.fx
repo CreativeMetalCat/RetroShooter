@@ -7,6 +7,14 @@
 	#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
+//Change this value depending on how much point lights you might have in one place in your project
+static const int MAX_POINT_LIGHTS  = 16;
+
+//Change this value depending on how much spot lights you might have in one place in your project
+#define MAX_SPOT_LIGHTS 8
+
+//Directional light can only have one ACTIVE instance per scene
+
 matrix WorldViewProjection;
 
 float4x4 World;
@@ -42,6 +50,12 @@ struct VertexShaderOutput
 	float2 TextureCoordinate : TEXCOORD0;
 };
 
+//point lights data. Not using structs because they tend to cause "shader has corrupt ctab data" error during shader compilation
+float4 pointLightsColor[MAX_POINT_LIGHTS];
+float3 pointLightsLocation[MAX_POINT_LIGHTS];
+float pointLightsIntensity[MAX_POINT_LIGHTS];
+bool pointLightsValid[MAX_POINT_LIGHTS];
+
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
 	VertexShaderOutput output = (VertexShaderOutput)0;
@@ -61,7 +75,18 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-	return tex2D(textureSampler, input.TextureCoordinate)*AmbientLightColor;
+	float4 resultColor = float4(0,0,0,0);
+	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
+	{
+		if(pointLightsValid[i] == true)
+		{
+			//this prevents shader from being compiled for some reason, the issue is caused by pointLights[i].Color
+			//resultColor += pointLights[i].Color * pointLights[i].Intensity;
+			resultColor += pointLightsColor[i] * pointLightsIntensity[i];
+		}
+				
+	}
+	return tex2D(textureSampler, input.TextureCoordinate)*(AmbientLightColor + resultColor);
 }
 
 technique BasicTexture

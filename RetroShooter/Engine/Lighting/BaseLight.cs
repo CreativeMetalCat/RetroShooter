@@ -6,6 +6,11 @@ namespace RetroShooter.Engine.Lighting
     public class BaseLight : Actor
     {
         protected Vector4 color;
+
+        /*
+         * How strong is this light source
+         */
+        public float Intensity = 1;
         
         public Vector4 LightColor => color;
 
@@ -22,6 +27,10 @@ namespace RetroShooter.Engine.Lighting
             if (xmlNode["Color"] != null)
             {
                 color = Helpers.XmlHelpers.VectorStringToVec4(xmlNode["Color"]?.InnerText);
+            }
+            if (xmlNode["Intensity"] != null)
+            {
+                Intensity = float.Parse(xmlNode["Intensity"].InnerText);
             }
         }
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Level name="test" version = "0.0.1">
     <Data>
-        <AmbientLightColor>1 0 1 1</AmbientLightColor>
+        <AmbientLightColor>0 0 0 1</AmbientLightColor>
     </Data>
     <Actors>
         <Actor name = "wall" type="RetroShooter.Shooter.Wall" >
@@ -48,7 +48,8 @@
         <Actor name = "light1" type="RetroShooter.Engine.Lighting.PointLight" >
             <Location>100 200 0</Location>
             <Rotation>90 0 0</Rotation>
-            <Color>0.5 1 0 1</Color>
+            <Color>0,1 0 0,5 1</Color>
+            <Intensity>1</Intensity>
         </Actor>
     </Actors>
 </Level>
