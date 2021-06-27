@@ -42,8 +42,13 @@
             <Rotation>90 0 0</Rotation>
         </Actor>
         <Actor name = "chair1" type="RetroShooter.Shooter.Chair" >
-            <Location>100 0 0</Location>
+            <Location>100 200 0</Location>
             <Rotation>90 0 0</Rotation>
+        </Actor>
+        <Actor name = "light1" type="RetroShooter.Engine.Lighting.PointLight" >
+            <Location>100 200 0</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>0.5 1 0 1</Color>
         </Actor>
     </Actors>
 </Level>
