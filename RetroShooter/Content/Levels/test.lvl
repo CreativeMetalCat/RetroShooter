@@ -2,20 +2,45 @@
 <Level name="test" version = "0.0.1">
     <Actors>
         <Actor name = "wall" type="RetroShooter.Shooter.Wall" >
-            <Location>0 40 0</Location>
-            <Rotation>0 90 0</Rotation>
+            <Location>0 0 0</Location>
+            <Rotation>0 0 0</Rotation>
         </Actor>
         <Actor name = "wall2" type="RetroShooter.Shooter.Wall" >
-            <Location>0 400 0</Location>
-            <Rotation>45 0 0</Rotation>
+            <Location>400 0 0</Location>
+            <Rotation>0 0 0</Rotation>
         </Actor>
          <Actor name = "wall3" type="RetroShooter.Shooter.Wall" >
-            <Location>0 0 200</Location>
-            <Rotation>0 80 0</Rotation>
+            <Location>800 0 0</Location>
+            <Rotation>0 0 0</Rotation>
+        </Actor>
+         <Actor name = "wall4" type="RetroShooter.Shooter.Wall" >
+            <Location>0 0 0</Location>
+            <Rotation>90 0 0</Rotation>
+        </Actor>
+        <Actor name = "wall5" type="RetroShooter.Shooter.Wall" >
+            <Location>400 0 0</Location>
+            <Rotation>90 0 0</Rotation>
+        </Actor>
+         <Actor name = "wall6" type="RetroShooter.Shooter.Wall" >
+            <Location>800 0 0</Location>
+            <Rotation>90 0 0</Rotation>
+        </Actor>
+
+        <Actor name = "wall7" type="RetroShooter.Shooter.Wall" >
+            <Location>0 400 400</Location>
+            <Rotation>90 0 0</Rotation>
+        </Actor>
+        <Actor name = "wall8" type="RetroShooter.Shooter.Wall" >
+            <Location>400 400 0</Location>
+            <Rotation>90 0 0</Rotation>
+        </Actor>
+         <Actor name = "wall9" type="RetroShooter.Shooter.Wall" >
+            <Location>800 400 0</Location>
+            <Rotation>90 0 0</Rotation>
         </Actor>
         <Actor name = "chair1" type="RetroShooter.Shooter.Chair" >
-            <Location>0 0 200</Location>
-            <Rotation>0 80 0</Rotation>
+            <Location>100 0 0</Location>
+            <Rotation>90 0 0</Rotation>
         </Actor>
     </Actors>
 </Level>
