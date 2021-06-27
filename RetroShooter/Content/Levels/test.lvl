@@ -13,5 +13,9 @@
             <Location>0 0 200</Location>
             <Rotation>0 80 0</Rotation>
         </Actor>
+        <Actor name = "chair1" type="RetroShooter.Shooter.Chair" >
+            <Location>0 0 200</Location>
+            <Rotation>0 80 0</Rotation>
+        </Actor>
     </Actors>
 </Level>

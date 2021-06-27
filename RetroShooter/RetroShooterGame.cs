@@ -103,6 +103,8 @@ namespace RetroShooter
             {
                 actor.Init();
             }
+            
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -135,8 +137,9 @@ namespace RetroShooter
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             
+            _spriteBatch.Begin();
             foreach (Actor actor in actors)
             {
                 actor.Draw(gameTime.ElapsedGameTime.Milliseconds);
@@ -147,7 +150,7 @@ namespace RetroShooter
             {
                 AddDebugMessage("Mouse is hidden. Press SPACEBAR to show mouse",0,Color.Azure);
             }
-            _spriteBatch.Begin();
+            
             try
             {
                 if (debugOutput.Count > 0)

@@ -65,6 +65,7 @@ namespace RetroShooter.Engine.Material
                                     /*if texture is null then it will throw null exception and be ignored*/
                                     game.Content.Load<Texture2D>(texture
                                         .InnerText));
+                                
                                 //variable is created separately to avoid putting null variable into the material
                                 Variables.Add(mat);
                             }
