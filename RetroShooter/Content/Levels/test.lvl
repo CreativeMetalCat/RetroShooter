@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Level name="test" version = "0.0.1">
+    <Data>
+        <AmbientLightColor>1 0 1 1</AmbientLightColor>
+    </Data>
     <Actors>
         <Actor name = "wall" type="RetroShooter.Shooter.Wall" >
             <Location>0 0 0</Location>

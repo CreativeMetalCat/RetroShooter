@@ -104,6 +104,8 @@ namespace RetroShooter.Engine.Material
                 _effect.Parameters["WorldInverseTranspose"]
                     ?.SetValue(Matrix.Transpose(Matrix.Invert(game.CurrentCamera.WorldMatrix * objectTransform)));
 
+                _effect.Parameters["AmbientLightColor"]?.SetValue(game.CurrentAmbientLightColor);
+
                 foreach (MatVariable variable in Variables)
                 {
                     switch (variable.Type)

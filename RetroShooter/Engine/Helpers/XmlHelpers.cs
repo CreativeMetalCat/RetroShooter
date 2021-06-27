@@ -15,5 +15,11 @@ namespace RetroShooter.Engine.Helpers
             float[] vecStr = VectorStringToArray(vecString);
             return new Vector3(vecStr[0],vecStr[1],vecStr[2]);
         }
+        
+        public static Vector4 VectorStringToVec4(string vecString)
+        {
+            float[] vecStr = VectorStringToArray(vecString);
+            return new Vector4(vecStr[0],vecStr[1],vecStr[2],vecStr[3]);
+        }
     }
 }

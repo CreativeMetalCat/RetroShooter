@@ -18,6 +18,8 @@ namespace RetroShooter
         private SpriteBatch _spriteBatch;
 
         protected SpriteFont defaultFont;
+
+        public Vector4 CurrentAmbientLightColor = Vector4.Zero;
         
         public SpriteFont DefaultFont
         {
