@@ -96,7 +96,7 @@ namespace RetroShooter
             defaultFont = Content.Load<SpriteFont>("bebas_neue");
                 
             AddActor(new Wall("wall", LastActorId, this,null));
-            currentCamera = AddActor(new PlayerCamera("player", LastActorId, this, 0.1f, true));
+            currentCamera = AddActor(new PlayerCamera3D("player", LastActorId, this, 0.1f, true));
             
             World.LoadWorld("Levels/test", this);
             
@@ -107,6 +107,8 @@ namespace RetroShooter
             
             
         }
+        
+        
 
         protected override void Update(GameTime gameTime)
         {
