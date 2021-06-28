@@ -29,6 +29,7 @@ namespace RetroShooter
         public GraphicsDevice GraphicsDevice => _graphics.GraphicsDevice;
 
         public List<PointLight> CurrentlyActivePointLights = new List<PointLight>();
+        public List<SpotLight> CurrentlyActiveSpotLights = new List<SpotLight>();
         /**
          * Current camera that is used for rendering
          */
@@ -61,17 +62,17 @@ namespace RetroShooter
         protected List<DebugMessage> debugOutput = new List<DebugMessage>();
         /**
          * Adds actor to the world.
-         * If name is already taken or any other error occured => returns null and doesn't add actor
+         * If name is already taken or any other error occured => adds number to the end of the actor's name
          * It is preferable to pass not already existing actor but a `new Actor(args)`
          */
         public T AddActor<T>(T actor) where T: Actor
         {
-            if (actors.Find(item => item.Name == actor.Name) == null)
+            if (actors.Find(item => item.Name == actor.Name) != null)
             {
-                actors.Add(actor);
-                lastActorId++;
-                return actor;
+                actor.Name = actor.Name + LastActorId.ToString();
             }
+            actors.Add(actor);
+            lastActorId++;
             return actor;
         }
 
@@ -80,8 +81,6 @@ namespace RetroShooter
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-          
-            
         }
         
         public int LastActorId
@@ -127,9 +126,13 @@ namespace RetroShooter
                 
                 //temporary and rather bad solution
                 //but the goal is to have lights only be in that list when they are close enough to the player
-                if (!CurrentlyActivePointLights.Contains(actor as PointLight) && actor is BaseLight)
+                if (!CurrentlyActivePointLights.Contains(actor as PointLight) && actor is PointLight)
                 {
                     CurrentlyActivePointLights.Add(actor as PointLight);
+                }
+                if (!CurrentlyActiveSpotLights.Contains(actor as SpotLight) && actor is SpotLight)
+                {
+                    CurrentlyActiveSpotLights.Add(actor as SpotLight);
                 }
             }
 

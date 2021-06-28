@@ -125,6 +125,25 @@ namespace RetroShooter.Engine.Material
                     }
                 }
                 
+                //this value MUST match MAX_SPOT_LIGHTS in effect used by this material
+                for (int i = 0; i < 16; i++)
+                {
+                    //this means that i is in range of the lights
+                    if (game.CurrentlyActiveSpotLights.Count > i)
+                    {
+                        game.CurrentlyActiveSpotLights[i].ApplyLightData(_effect, i);
+                    }
+                    //this means that i is outside of the range and that we need to place fake lights(lights that will not be calculated)
+                    else
+                    {
+                        _effect.Parameters["spotLightsColor"]?.Elements[i].SetValue(Vector4.Zero);
+                        _effect.Parameters["spotLightsLocation"]?.Elements[i].SetValue(Vector3.Zero);
+                        _effect.Parameters["spotLightsIntensity"]?.Elements[i].SetValue(0f);
+                        _effect.Parameters["spotLightsRadius"]?.Elements[i].SetValue(0f);
+                        _effect.Parameters["spotLightsValid"]?.Elements[i].SetValue(false);
+                    }
+                }
+                
                 foreach (MatVariable variable in Variables)
                 {
                     switch (variable.Type)
