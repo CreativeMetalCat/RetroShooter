@@ -1,5 +1,6 @@
 ﻿using System.Xml;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RetroShooter.Engine.Lighting
 {
@@ -33,5 +34,11 @@ namespace RetroShooter.Engine.Lighting
                 Intensity = float.Parse(xmlNode["Intensity"].InnerText);
             }
         }
+
+        public virtual void ApplyLightData(Effect effect,int lightId)
+        {
+            
+        }
+        
     }
 }

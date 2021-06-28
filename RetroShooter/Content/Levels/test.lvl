@@ -50,7 +50,15 @@
             <Location>200 300 0</Location>
             <Rotation>90 0 0</Rotation>
             <Color>0,1 0 0,5 1</Color>
-            <Intensity>1</Intensity>
+            <Intensity>5</Intensity>
+            <Radius>1000</Radius>
+        </Actor>
+        <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
+            <Location>500 300 0</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>1 0 1 1</Color>
+            <Intensity>5</Intensity>
+            <Radius>1000</Radius>
         </Actor>
     </Actors>
 </Level>

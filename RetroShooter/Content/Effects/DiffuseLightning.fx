@@ -57,6 +57,7 @@ struct VertexShaderOutput
 float4 pointLightsColor[MAX_POINT_LIGHTS];
 float3 pointLightsLocation[MAX_POINT_LIGHTS];
 float pointLightsIntensity[MAX_POINT_LIGHTS];
+float pointLightsRadius[MAX_POINT_LIGHTS];
 bool pointLightsValid[MAX_POINT_LIGHTS];
 
 float Vec3LenghtSquared(float3 vec)
@@ -89,18 +90,17 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 		if(pointLightsValid[i] == true)
 		{
 			float3 pointLightDirection = output.WorldPos - pointLightsLocation[i];
-			float distance = sqrt(Vec3LenghtSquared(pointLightDirection));
-			if(distance > 0)
+			float distanceSq = Vec3LenghtSquared(pointLightDirection);
+			float radius = pointLightsRadius[i];
+			if(distanceSq < abs(radius*radius))
 			{
+				float distance = sqrt(distanceSq);
+				float du = distance/(1-distanceSq/(radius*radius -1));
+				float denom = du / abs(radius) + 1;
+				float attenuetion = 1/(denom*denom);
+
 				pointLightDirection /= distance;
-				
-				float res = saturate(dot(normal,-pointLightDirection));
-				//dot(input.Normal,-pointLightDirection) <- causes freezing, removing input.Normal seems to have good effect
-				//resultColor += pointLightsColor[i]*pointLightsIntensity[i]; // doesn't freeze the game
-				//resultColor += saturate(dot(input.Normal,-pointLightDirection))*pointLightsIntensity[i]*pointLightsColor[i]; // freezes the game
-				resultColor += res* pointLightsColor[i]*pointLightsIntensity[i]; // freezes the game
-				//resultColor += pointLightsColor[i]*pointLightsIntensity[i]*cos(clamp(dot(input.Normal,pointLightDirection),0,1));resultColor += pointLightsColor[i]*pointLightsIntensity[i];
-				
+				resultColor +=saturate(dot(normal,-pointLightDirection))* pointLightsColor[i]*pointLightsIntensity[i] * attenuetion;	
 			}
 		}
 				

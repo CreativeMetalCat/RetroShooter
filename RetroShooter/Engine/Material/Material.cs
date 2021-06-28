@@ -112,10 +112,7 @@ namespace RetroShooter.Engine.Material
                     //this means that i is in range of the lights
                     if (game.CurrentlyActivePointLights.Count > i)
                     {
-                        _effect.Parameters["pointLightsColor"]?.Elements[i].SetValue(game.CurrentlyActivePointLights[i].LightColor);
-                        _effect.Parameters["pointLightsLocation"]?.Elements[i].SetValue(game.CurrentlyActivePointLights[i].Location);
-                        _effect.Parameters["pointLightsIntensity"]?.Elements[i].SetValue(game.CurrentlyActivePointLights[i].Intensity);
-                        _effect.Parameters["pointLightsValid"]?.Elements[i].SetValue(true);
+                        game.CurrentlyActivePointLights[i].ApplyLightData(_effect, i);
                     }
                     //this means that i is outside of the range and that we need to place fake lights(lights that will not be calculated)
                     else
@@ -123,6 +120,7 @@ namespace RetroShooter.Engine.Material
                         _effect.Parameters["pointLightsColor"]?.Elements[i].SetValue(Vector4.Zero);
                         _effect.Parameters["pointLightsLocation"]?.Elements[i].SetValue(Vector3.Zero);
                         _effect.Parameters["pointLightsIntensity"]?.Elements[i].SetValue(0f);
+                        _effect.Parameters["pointLightsRadius"]?.Elements[i].SetValue(0f);
                         _effect.Parameters["pointLightsValid"]?.Elements[i].SetValue(false);
                     }
                 }
