@@ -23,6 +23,7 @@ float4x4 Projection;
 float4x4 WorldInverseTranspose;
 
 float4 AmbientLightColor;
+float AmbientLightIntensity;
 
 texture BaseTexture;
 
@@ -48,6 +49,8 @@ struct VertexShaderOutput
 	float4 Position : SV_POSITION;
 	float4 Color : COLOR0;
 	float2 TextureCoordinate : TEXCOORD0;
+	float3 WorldPos : TEXCOORD2;
+	float4 Normal:NORMAL0;
 };
 
 //point lights data. Not using structs because they tend to cause "shader has corrupt ctab data" error during shader compilation
@@ -55,6 +58,11 @@ float4 pointLightsColor[MAX_POINT_LIGHTS];
 float3 pointLightsLocation[MAX_POINT_LIGHTS];
 float pointLightsIntensity[MAX_POINT_LIGHTS];
 bool pointLightsValid[MAX_POINT_LIGHTS];
+
+float Vec3LenghtSquared(float3 vec)
+{
+	return vec.x*vec.x+vec.y*vec.y+vec.z*vec.z;
+}
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
 {
@@ -65,28 +73,60 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	output.Position = mul(viewPosition,Projection);
 
 	float4 normal = mul(input.Normal,WorldInverseTranspose);
+
+	output.WorldPos = mul(input.Position,World).xyz;
 	
 	//output.Position = mul(input.Position, WorldViewProjection);
-	output.Color = AmbientLightColor;
+	output.Color = AmbientLightColor*AmbientLightIntensity;
 
 	output.TextureCoordinate=input.TextureCoordinate;
-	return output;
-}
 
-float4 MainPS(VertexShaderOutput input) : COLOR
-{
-	float4 resultColor = float4(0,0,0,0);
+	output.Normal = normal;
+
+	float4 resultColor = output.Color;
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
 		if(pointLightsValid[i] == true)
 		{
-			//this prevents shader from being compiled for some reason, the issue is caused by pointLights[i].Color
-			//resultColor += pointLights[i].Color * pointLights[i].Intensity;
-			resultColor += pointLightsColor[i] * pointLightsIntensity[i];
+			float3 pointLightDirection = output.WorldPos - pointLightsLocation[i];
+			float distance = sqrt(Vec3LenghtSquared(pointLightDirection));
+			if(distance > 0)
+			{
+				pointLightDirection /= distance;
+				
+				float res = saturate(dot(normal,-pointLightDirection));
+				//dot(input.Normal,-pointLightDirection) <- causes freezing, removing input.Normal seems to have good effect
+				//resultColor += pointLightsColor[i]*pointLightsIntensity[i]; // doesn't freeze the game
+				//resultColor += saturate(dot(input.Normal,-pointLightDirection))*pointLightsIntensity[i]*pointLightsColor[i]; // freezes the game
+				resultColor += res* pointLightsColor[i]*pointLightsIntensity[i]; // freezes the game
+				//resultColor += pointLightsColor[i]*pointLightsIntensity[i]*cos(clamp(dot(input.Normal,pointLightDirection),0,1));resultColor += pointLightsColor[i]*pointLightsIntensity[i];
+				
+			}
 		}
 				
 	}
-	return tex2D(textureSampler, input.TextureCoordinate)*(AmbientLightColor + resultColor);
+	output.Color += resultColor;
+
+	return output;
+}
+
+
+
+float3 CalculatePointLight(float3 pointLightColor,float3 pointLightLocation,float pointLightIntensity, VertexShaderOutput input)
+{
+	float3 pointLightDirection = input.WorldPos - pointLightLocation;
+	float distanceSq = Vec3LenghtSquared(pointLightDirection);
+
+	float distance = sqrt(distanceSq);
+	pointLightDirection /= distance;
+	return pointLightColor*pointLightIntensity*1*cos(clamp(dot(input.Normal,pointLightDirection),0,1));
+}
+
+float4 MainPS(VertexShaderOutput input) : COLOR
+{
+	
+	//return tex2D(textureSampler, input.TextureCoordinate)*(AmbientLightColor + resultColor);
+	return (input.Color + AmbientLightColor*AmbientLightIntensity) * tex2D(textureSampler, input.TextureCoordinate);
 }
 
 technique BasicTexture

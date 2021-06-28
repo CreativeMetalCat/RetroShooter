@@ -2,6 +2,7 @@
 <Level name="test" version = "0.0.1">
     <Data>
         <AmbientLightColor>0 0 0 1</AmbientLightColor>
+        <AmbientLightIntensity>1</AmbientLightIntensity>
     </Data>
     <Actors>
         <Actor name = "wall" type="RetroShooter.Shooter.Wall" >
@@ -46,7 +47,7 @@
             <Rotation>90 0 0</Rotation>
         </Actor>
         <Actor name = "light1" type="RetroShooter.Engine.Lighting.PointLight" >
-            <Location>100 200 0</Location>
+            <Location>200 300 0</Location>
             <Rotation>90 0 0</Rotation>
             <Color>0,1 0 0,5 1</Color>
             <Intensity>1</Intensity>
