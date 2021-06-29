@@ -24,7 +24,7 @@
 #begin Effects/TestEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /processorParam:Defines=
 /build:Effects/TestEffect.fx
 

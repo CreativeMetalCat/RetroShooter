@@ -94,13 +94,13 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	output.Normal = normal;
 
 	float4 resultColor = output.Color;
+	[unroll]
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
-		if(pointLightsValid[i] == true)
-		{
 			float3 pointLightDirection = output.WorldPos - pointLightsLocation[i];
 			float distanceSq = Vec3LenghtSquared(pointLightDirection);
 			float radius = pointLightsRadius[i];
+			[branch]
 			if(distanceSq < abs(radius*radius))
 			{
 				float distance = sqrt(distanceSq);
@@ -109,14 +109,17 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 				float attenuetion = 1/(denom*denom);
 
 				pointLightDirection /= distance;
-				resultColor +=saturate(dot(normal,-pointLightDirection))* pointLightsColor[i]*pointLightsIntensity[i] * attenuetion;	
+				resultColor += saturate(dot(normal,-pointLightDirection)) * pointLightsColor[i] * pointLightsIntensity[i] * attenuetion;	
+				//resultColor += float4(pointLightsLocation[i],1);
 			}
-		}
+		
 				
 	}
 
+	[unroll]
 	for(int i = 0; i < MAX_SPOT_LIGHTS; i++)
 	{
+		[branch]
 		if(spotLightsValid[i] == true)
 		{
 			float3 spotLightDirection = output.WorldPos - spotLightsLocation[i];
@@ -136,7 +139,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 					float attenuetion = 1/(denom*denom);
 
 					spotLightDirection /= distance;
-					resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*spotLightsIntensity[i] * attenuetion;	
+					//resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*spotLightsIntensity[i] * attenuetion;	
 			}
 		}
 	}

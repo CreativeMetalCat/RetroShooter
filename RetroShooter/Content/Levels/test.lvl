@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Level name="test" version = "0.0.1">
     <Data>
-        <AmbientLightColor>0 0 0 1</AmbientLightColor>
+        <AmbientLightColor>0,1 0,1 0,1 1</AmbientLightColor>
         <AmbientLightIntensity>1</AmbientLightIntensity>
     </Data>
     <Actors>
@@ -110,24 +110,33 @@
             <Location>400 50 0</Location>
             <Rotation>90 0 0</Rotation>
         </Actor>
-        <Actor name = "chair5" type="RetroShooter.Shooter.Chair" >
-            <Location>500 50 0</Location>
-            <Rotation>90 0 0</Rotation>
+        <Actor name = "chair555" type="RetroShooter.Shooter.Chair" >
+             
+            <Location>0 0 0</Location>
+            <Rotation>0 0 0</Rotation>
         </Actor>
+        
         <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
-            <Location>500 300 100</Location>
+            
+            <Location>0 0 0</Location>
             <Rotation>90 0 0</Rotation>
             <Color>1 0 1 1</Color>
-            <Intensity>5</Intensity>
-            <Radius>1000</Radius>
+            <Intensity>1</Intensity>
+            <Radius>500</Radius>
         </Actor>
         <Actor name = "spotlight1" type="RetroShooter.Engine.Lighting.SpotLight" >
-            <Location>200 300 0</Location>
-            <Rotation>90 0 0</Rotation>
+            
+            <Location>0 0 0</Location>
+            <Rotation>0 0 0</Rotation>
             <Color>1 0 0 1</Color>
             <Intensity>5</Intensity>
             <Radius>1000</Radius>
             <ConeAngle>30</ConeAngle>
+        </Actor>
+        <Actor name = "chair556" type="RetroShooter.Shooter.Chair" >
+             <Owner>light2</Owner>
+            <Location>50 0 0</Location>
+            <Rotation>0 0 0</Rotation>
         </Actor>
     </Actors>
 </Level>

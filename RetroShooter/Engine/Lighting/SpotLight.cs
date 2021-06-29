@@ -40,11 +40,5 @@ namespace RetroShooter.Engine.Lighting
             effect.Parameters["spotLightsRadius"]?.Elements[lightId]?.SetValue(Radius);
             effect.Parameters["spotLightsCutoff"]?.Elements[lightId]?.SetValue(MathF.Cos(ConeAngle));
         }
-
-        public override void Update(float deltaTime)
-        {
-            base.Update(deltaTime);
-            Rotation += new Vector3(10f * deltaTime, 10f * deltaTime, 0);
-        }
     }
 }

@@ -44,6 +44,8 @@ namespace RetroShooter
             debugOutput.Add(new DebugMessage(msg,duration,color));
         }
 
+        public bool PointLightsDirty = true;
+
         protected Camera currentCamera;
         
         /**
@@ -92,6 +94,11 @@ namespace RetroShooter
             base.Initialize();
         }
 
+        public Actor GetActor(string name)
+        {
+            return actors.Find(item => item.Name == name);
+        }
+
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -136,6 +143,15 @@ namespace RetroShooter
                 }
             }
 
+            AddDebugMessage(currentCamera?.Location.ToString(),0, Color.Blue);
+            AddDebugMessage(currentCamera?.Rotation.ToString(),0, Color.Blue);
+
+            GetActor("chair555").Location += new Vector3(0, 0.1f * gameTime.ElapsedGameTime.Milliseconds, 0);
+            //GetActor("chair556").Location += new Vector3(0, 0.1f * gameTime.ElapsedGameTime.Milliseconds, 0);
+            
+            AddDebugMessage(GetActor("chair555")?.Location.ToString(),0, Color.Blue);
+            AddDebugMessage(GetActor("chair555")?.Rotation.ToString(),0, Color.Blue);
+
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsSpaceDown)
             {
                 IsMouseVisible = !IsMouseVisible;
@@ -161,6 +177,9 @@ namespace RetroShooter
             {
                 actor.Draw(gameTime.ElapsedGameTime.Milliseconds);
             }
+
+            //all of the materials that needed to update light data were updated
+            PointLightsDirty = false;
             
             AddDebugMessage(gameTime.ElapsedGameTime.Milliseconds.ToString(),0,Color.Blue);
             if (!IsMouseVisible)

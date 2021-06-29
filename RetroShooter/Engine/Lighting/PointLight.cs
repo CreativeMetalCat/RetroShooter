@@ -9,6 +9,8 @@ namespace RetroShooter.Engine.Lighting
     {
         protected float radius = 100f;
 
+        private float time = 0;
+
         public float Radius => radius;
         public PointLight(string name, int id, RetroShooterGame game,float _radius = 100f, Vector3 location = default, Vector3 rotation = default, Vector3 scale = default, Actor owner = null) : base(name, id, game, location, rotation, scale, owner)
         {
@@ -31,6 +33,18 @@ namespace RetroShooter.Engine.Lighting
             effect.Parameters["pointLightsIntensity"]?.Elements[lightId].SetValue(Intensity);
             effect.Parameters["pointLightsValid"]?.Elements[lightId].SetValue(true);
             effect.Parameters["pointLightsRadius"]?.Elements[lightId].SetValue(Radius);
+        }
+
+        public override void Update(float deltaTime)
+        {
+            base.Update(deltaTime);
+            time += deltaTime;
+            if (time > 64)
+            {
+                Location += new Vector3(-deltaTime / 50f, 0, -deltaTime / 100f);
+                if (game != null) game.PointLightsDirty = true;
+                time = 0;
+            }
         }
     }
 }
