@@ -62,6 +62,32 @@ namespace RetroShooter
         private bool IsSpaceDown = false;
 
         protected List<DebugMessage> debugOutput = new List<DebugMessage>();
+        
+        //Max amount of point lights that engine can render at once
+        public const int MAX_POINT_LIGHTS = 16;
+        
+        /*
+         * Array of all point light colors
+         */
+        private Vector4[] _pointColors = new Vector4[MAX_POINT_LIGHTS];
+        /*
+        * Array of all point light locations
+        */
+        private Vector3[] _pointLocations = new Vector3[MAX_POINT_LIGHTS];
+        /*
+        * Array of all point light Intensities
+        */
+        private float[] _pointIntensities = new float[MAX_POINT_LIGHTS];
+        /*
+        * Array of all point light radii
+        */
+        private float[] _pointRadii = new float[MAX_POINT_LIGHTS];
+        
+        public Vector4[] PointColors => _pointColors;
+        public Vector3[] PointLocations => _pointLocations;
+        public float[] PointIntensities => _pointIntensities;
+        public float[] PointRadii => _pointRadii;
+        
         /**
          * Adds actor to the world.
          * If name is already taken or any other error occured => adds number to the end of the actor's name
@@ -126,7 +152,33 @@ namespace RetroShooter
                 Exit();
 
             base.Update(gameTime);
-            
+            if (PointLightsDirty)
+            {
+                
+
+                //this value MUST match MAX_POINT_LIGHTS in effect used by this material
+                for (int i = 0; i < 16; i++)
+                {
+                    //this means that i is in range of the lights
+                    if (CurrentlyActivePointLights.Count > i)
+                    {
+                        //game.CurrentlyActivePointLights[i].ApplyLightData(_effect, i);
+                        _pointColors[i] = CurrentlyActivePointLights[i].LightColor;
+                        _pointLocations[i] = CurrentlyActivePointLights[i].Location;
+                        _pointIntensities[i] = CurrentlyActivePointLights[i].Intensity;
+                        _pointRadii[i] = CurrentlyActivePointLights[i].Radius;
+                    }
+                    
+                    else
+                    {
+                        _pointColors[i] = Vector4.Zero;
+                        _pointLocations[i] = Vector3.Zero;
+                        _pointIntensities[i] = 0;
+                        _pointRadii[i] = 0;
+                    }
+                }
+            }
+
             foreach (Actor actor in actors)
             {
                 actor.Update(gameTime.ElapsedGameTime.Milliseconds);
@@ -142,6 +194,8 @@ namespace RetroShooter
                     CurrentlyActiveSpotLights.Add(actor as SpotLight);
                 }
             }
+            
+            
 
             AddDebugMessage(currentCamera?.Location.ToString(),0, Color.Blue);
             AddDebugMessage(currentCamera?.Rotation.ToString(),0, Color.Blue);

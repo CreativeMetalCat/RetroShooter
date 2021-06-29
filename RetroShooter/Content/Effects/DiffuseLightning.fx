@@ -97,6 +97,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	[unroll]
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
+		if(pointLightsIntensity[i] > 0)
+		{
 			float3 pointLightDirection = output.WorldPos - pointLightsLocation[i];
 			float distanceSq = Vec3LenghtSquared(pointLightDirection);
 			float radius = pointLightsRadius[i];
@@ -110,9 +112,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 				pointLightDirection /= distance;
 				resultColor += saturate(dot(normal,-pointLightDirection)) * pointLightsColor[i] * pointLightsIntensity[i] * attenuetion;	
-				//resultColor += float4(pointLightsLocation[i],1);
 			}
-		
+		}
 				
 	}
 

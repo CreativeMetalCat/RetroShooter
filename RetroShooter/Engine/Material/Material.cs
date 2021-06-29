@@ -15,7 +15,7 @@ namespace RetroShooter.Engine.Material
      */
     public class Material
     {
-        public const int MAX_POINT_LIGHTS = 16;
+       
         public List<MatVariable> Variables = new List<MatVariable>();
 
         private Effect _effect;
@@ -107,45 +107,13 @@ namespace RetroShooter.Engine.Material
 
                 _effect.Parameters["AmbientLightColor"]?.SetValue(game.CurrentAmbientLightColor);
 
+
                 if (game.PointLightsDirty)
                 {
-                    Vector4[] colors = new Vector4[MAX_POINT_LIGHTS];
-                    Vector3[] locations = new Vector3[MAX_POINT_LIGHTS];
-                    float[] intensities = new float[MAX_POINT_LIGHTS];
-                    float[] radii = new float[MAX_POINT_LIGHTS];
-
-                    //this value MUST match MAX_POINT_LIGHTS in effect used by this material
-                    for (int i = 0; i < 16; i++)
-                    {
-                        //this means that i is in range of the lights
-                        if (game.CurrentlyActivePointLights.Count > i)
-                        {
-                            //game.CurrentlyActivePointLights[i].ApplyLightData(_effect, i);
-                            colors[i] = game.CurrentlyActivePointLights[i].LightColor;
-                            locations[i] = game.CurrentlyActivePointLights[i].Location;
-                            intensities[i] = game.CurrentlyActivePointLights[i].Intensity;
-                            radii[i] = game.CurrentlyActivePointLights[i].Radius;
-                        }
-                        //this means that i is outside of the range and that we need to place fake lights(lights that will not be calculated)
-                        else
-                        {
-                            /*_effect.Parameters["pointLightsColor"]?.Elements[i].SetValue(Vector4.Zero);
-                            _effect.Parameters["pointLightsLocation"]?.Elements[i].SetValue(Vector3.Zero);
-                            _effect.Parameters["pointLightsIntensity"]?.Elements[i].SetValue(0f);
-                            _effect.Parameters["pointLightsRadius"]?.Elements[i].SetValue(0f);
-                            _effect.Parameters["pointLightsValid"]?.Elements[i].SetValue(false);
-                            */
-                            colors[i] = Vector4.Zero;
-                            locations[i] = Vector3.Zero;
-                            intensities[i] = 0;
-                            radii[i] = 0;
-                        }
-                    }
-
-                    _effect.Parameters["pointLightsColor"]?.SetValue(colors);
-                    _effect.Parameters["pointLightsLocation"]?.SetValue(locations);
-                    _effect.Parameters["pointLightsIntensity"]?.SetValue(intensities);
-                    _effect.Parameters["pointLightsRadius"]?.SetValue(radii);
+                    _effect.Parameters["pointLightsColor"]?.SetValue(game.PointColors);
+                    _effect.Parameters["pointLightsLocation"]?.SetValue(game.PointLocations);
+                    _effect.Parameters["pointLightsIntensity"]?.SetValue(game.PointIntensities);
+                    _effect.Parameters["pointLightsRadius"]?.SetValue(game.PointRadii);
                 }
 
                 //this value MUST match MAX_SPOT_LIGHTS in effect used by this material
