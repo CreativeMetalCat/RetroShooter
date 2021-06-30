@@ -140,7 +140,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 					float attenuetion = 1/(denom*denom);
 
 					spotLightDirection /= distance;
-					//resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*spotLightsIntensity[i] * attenuetion;	
+					resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*spotLightsIntensity[i] * attenuetion;	
 			}
 		}
 	}

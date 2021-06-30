@@ -32,13 +32,7 @@ namespace RetroShooter.Engine.Lighting
         public override void ApplyLightData(Effect effect, int lightId)
         {
             base.ApplyLightData(effect, lightId);
-            effect.Parameters["spotLightsColor"]?.Elements[lightId]?.SetValue(LightColor);
-            effect.Parameters["spotLightsLocation"]?.Elements[lightId]?.SetValue(Location);
-            effect.Parameters["spotLightsDirection"]?.Elements[lightId]?.SetValue(ForwardVector);
-            effect.Parameters["spotLightsIntensity"]?.Elements[lightId]?.SetValue(Intensity);
-            effect.Parameters["spotLightsValid"]?.Elements[lightId]?.SetValue(true);
-            effect.Parameters["spotLightsRadius"]?.Elements[lightId]?.SetValue(Radius);
-            effect.Parameters["spotLightsCutoff"]?.Elements[lightId]?.SetValue(MathF.Cos(ConeAngle));
+            
         }
     }
 }
