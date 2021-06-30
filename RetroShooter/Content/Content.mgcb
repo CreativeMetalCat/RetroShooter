@@ -41,11 +41,6 @@
 #begin Materials/BaseMaterial.mat
 /copy:Materials/BaseMaterial.mat
 
-#begin Materials/BaseMaterial.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Materials/BaseMaterial.xml
-
 #begin Materials/EmptyMaterial.mat
 /copy:Materials/EmptyMaterial.mat
 

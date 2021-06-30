@@ -55,7 +55,7 @@ struct VertexShaderOutput
 	float4 Color : COLOR0;
 	float2 TextureCoordinate : TEXCOORD0;
 	float3 WorldPos : TEXCOORD2;
-	float4 Normal:NORMAL0;
+	float4 Normal:TEXCOORD3;
 };
 
 //point lights data. Not using structs because they tend to cause "shader has corrupt ctab data" error during shader compilation
@@ -96,22 +96,27 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	float4 normal = mul(input.Normal,WorldInverseTranspose);
 
 	output.WorldPos = mul(input.Position,World).xyz;
-	
-	//output.Position = mul(input.Position, WorldViewProjection);
+
 	output.Color = AmbientLightColor*AmbientLightIntensity;
 
-	output.TextureCoordinate=input.TextureCoordinate;
+	output.TextureCoordinate = input.TextureCoordinate;
 
 	output.Normal = normal;
 
-	float4 resultColor = output.Color;
+	return output;
+}
+
+float4 MainPS(VertexShaderOutput input) : COLOR
+{
+	
+	float4 resultColor = float4(0,0,0,0);
 
 	[unroll]
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
 		if(pointLightsIntensity[i] > 0)
 		{
-			float3 pointLightDirection = output.WorldPos - pointLightsLocation[i];
+			float3 pointLightDirection = input.WorldPos - pointLightsLocation[i];
 			float distanceSq = Vec3LenghtSquared(pointLightDirection);
 			float radius = pointLightsRadius[i];
 			[branch]
@@ -123,7 +128,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 				float attenuetion = 1/(denom*denom);
 
 				pointLightDirection /= distance;
-				resultColor += saturate(dot(normal,-pointLightDirection)) * pointLightsColor[i] * pointLightsIntensity[i] * attenuetion;	
+				resultColor += saturate(dot(input.Normal,-pointLightDirection)) * pointLightsColor[i] * pointLightsIntensity[i] * attenuetion;	
 			}
 		}
 				
@@ -135,7 +140,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 		[branch]
 		if(spotLightsIntensity[i] > 0)
 		{
-			float3 spotLightDirection = output.WorldPos - spotLightsLocation[i];
+			float3 spotLightDirection = input.WorldPos - spotLightsLocation[i];
 			float theta = dot(spotLightDirection,normalize(-spotLightsDirection[i]));
 
 			float distanceSq = Vec3LenghtSquared(spotLightDirection);
@@ -152,21 +157,14 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 			float attenuetion = 1/(denom*denom);
 
 			spotLightDirection /= distance;
-			resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*(spotLightsIntensity[i]*intensity ) * attenuetion;
+			resultColor += saturate(dot(input.Normal,-spotLightDirection))* spotLightsColor[i]*(spotLightsIntensity[i]*intensity ) * attenuetion;
 		}
 	}
-
-
-	output.Color += resultColor;
-
-	return output;
-}
-
-float4 MainPS(VertexShaderOutput input) : COLOR
-{
-	
-	//return tex2D(textureSampler, input.TextureCoordinate)*(AmbientLightColor + resultColor);
-	return (input.Color + AmbientLightColor*AmbientLightIntensity) * tex2D(textureSampler, input.TextureCoordinate);
+	for(int d = 0; d < MAX_DIR_LIGHTS;d ++)
+	{
+		resultColor += saturate(dot(input.Normal,-normalize(-dirLightsDirection[d])))*dirLightsColor[d]*dirLightsIntensity[d];	
+	}
+	return (input.Color + resultColor) * tex2D(textureSampler, input.TextureCoordinate);
 }
 
 technique BasicTexture

@@ -357,6 +357,8 @@ namespace RetroShooter
                     }
                 }
             }
+
+            
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsSpaceDown)
             {
                 IsMouseVisible = !IsMouseVisible;
@@ -406,6 +408,9 @@ namespace RetroShooter
             PointLightsDirty = false;
             SpotlightsDirty = false;
             DirectionalLightDirty = false;
+            
+            GetActor("spotlight1").Rotation += new Vector3(0, gameTime.ElapsedGameTime.Milliseconds / 10f, 0);
+            AddDebugMessage(GetActor("spotlight1").Rotation.ToString(),0,Color.Blue);
 
             AddDebugMessage(gameTime.ElapsedGameTime.Milliseconds.ToString(), 0, Color.Blue);
             if (!IsMouseVisible)
