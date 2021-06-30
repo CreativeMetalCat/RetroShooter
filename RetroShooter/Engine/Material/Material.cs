@@ -235,8 +235,7 @@ namespace RetroShooter.Engine.Material
                                         }
 
                                         break;
-                                    //other types need special parses
-                                    //TODO: Add parsers for types for arrays
+                                    //other types need special parses and as such ignored
                                     default:
                                         matVar = new MatVariable("null", false);
                                         break;

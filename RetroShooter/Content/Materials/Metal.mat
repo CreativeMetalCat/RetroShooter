@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Material version="0.0.1">
+  <EffectName>DiffuseLightning</EffectName>
+ <Textures>
+  <Texure type="BaseTexture">Textures/Metal/Metal021_1K_Color</Texure>
+  <Texure type="SpecularTexture">Textures/Metal/Metal021_1K_Metalness</Texure>
+ </Textures>
+<Params>
+  <Shininess type="float">2</Shininess>
+</Params>
+</Material>

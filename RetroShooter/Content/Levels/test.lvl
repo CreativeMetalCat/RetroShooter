@@ -144,5 +144,11 @@
             <Intensity>1</Intensity>
             <Radius>500</Radius>
         </Actor>
+        <Actor name = "sun" type="RetroShooter.Engine.Lighting.DirectionalLight" >
+            <Location>0 0 0</Location>
+            <Rotation>0 0 0</Rotation>
+            <Color>1 1 1 1</Color>
+            <Intensity>1</Intensity>
+        </Actor>
     </Actors>
 </Level>

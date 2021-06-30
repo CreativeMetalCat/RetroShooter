@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Material version="0.0.1">>
+<Material version="0.0.1">
   <EffectName>DiffuseLightning</EffectName>
  <Textures>
   <Texure type="BaseTexture">Textures/T_Bricks</Texure>
