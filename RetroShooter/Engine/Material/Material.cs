@@ -33,6 +33,10 @@ namespace RetroShooter.Engine.Material
         private EffectParameter _spotLightsInnerCutoff;
         private EffectParameter _spotLightsOuterCutoff;
         
+        private EffectParameter _dirLightColors;
+        private EffectParameter _dirLightsIntensity;
+        private EffectParameter _dirLightsDirection;
+        
         public Effect Effect
         {
             get => _effect;
@@ -78,6 +82,11 @@ namespace RetroShooter.Engine.Material
                     _spotLightsRadius = _effect.Parameters["spotLightsRadius"];
                     _spotLightsInnerCutoff = _effect.Parameters["spotLightsInnerCutoff"];
                     _spotLightsOuterCutoff = _effect.Parameters["spotLightsOuterCutoff"];
+                    
+                    //directional lights
+                    _dirLightColors = _effect.Parameters["dirLightsColor"];
+                    _dirLightsDirection = _effect.Parameters["dirLightsDirection"];
+                    _dirLightsIntensity = _effect.Parameters["dirLightsIntensity"];
                 }
 
                 
@@ -154,6 +163,13 @@ namespace RetroShooter.Engine.Material
                     _spotLightsDirection?.SetValue(game.SpotDirections);
                     _spotLightsOuterCutoff?.SetValue(game.SpotInnerCutoffs);
                     _spotLightsInnerCutoff?.SetValue(game.SpotOuterCutoffs);
+                }
+
+                if (game.DirectionalLightDirty)
+                {
+                    _dirLightColors?.SetValue(game.DirColors);
+                    _dirLightsDirection?.SetValue(game.DirDirections);
+                    _dirLightsIntensity?.SetValue(game.DirIntensities);
                 }
                 
                 foreach (MatVariable variable in Variables)

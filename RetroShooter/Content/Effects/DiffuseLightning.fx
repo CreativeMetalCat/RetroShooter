@@ -13,6 +13,11 @@ static const int MAX_POINT_LIGHTS  = 16;
 //Change this value depending on how much spot lights you might have in one place in your project
 static const int MAX_SPOT_LIGHTS  = 16;
 
+//Change this value depending on how much spot lights you might have in one place in your project
+//note: while direcational lights need least amount of calculations, they are the kind that shines everywhere and this is 
+//the only situation where limit is not to avoid performance drop but to prevent having hight amount of these in one level
+static const int MAX_DIR_LIGHTS  = 2;
+
 //Directional light can only have one ACTIVE instance per scene
 
 matrix WorldViewProjection;
@@ -56,19 +61,24 @@ struct VertexShaderOutput
 //point lights data. Not using structs because they tend to cause "shader has corrupt ctab data" error during shader compilation
 float4 pointLightsColor[MAX_POINT_LIGHTS];
 float3 pointLightsLocation[MAX_POINT_LIGHTS];
-float pointLightsIntensity[MAX_POINT_LIGHTS];
-float pointLightsRadius[MAX_POINT_LIGHTS];
-bool pointLightsValid[MAX_POINT_LIGHTS];
+float  pointLightsIntensity[MAX_POINT_LIGHTS];
+float  pointLightsRadius[MAX_POINT_LIGHTS];
+bool   pointLightsValid[MAX_POINT_LIGHTS];
 
 //spotlights data. Not using structs because they tend to cause "shader has corrupt ctab data" error during shader compilation
 float4 spotLightsColor[MAX_SPOT_LIGHTS];
 float3 spotLightsLocation[MAX_SPOT_LIGHTS];
 float3 spotLightsDirection[MAX_SPOT_LIGHTS];
-float spotLightsIntensity[MAX_SPOT_LIGHTS];
-float spotLightsRadius[MAX_SPOT_LIGHTS];
-float spotLightsInnerCutoff[MAX_SPOT_LIGHTS];
-float spotLightsOuterCutoff[MAX_SPOT_LIGHTS];
-bool spotLightsValid[MAX_SPOT_LIGHTS];
+float  spotLightsIntensity[MAX_SPOT_LIGHTS];
+float  spotLightsRadius[MAX_SPOT_LIGHTS];
+float  spotLightsInnerCutoff[MAX_SPOT_LIGHTS];
+float  spotLightsOuterCutoff[MAX_SPOT_LIGHTS];
+bool   spotLightsValid[MAX_SPOT_LIGHTS];
+
+//directional light data. Not using structs because they tend to cause "shader has corrupt ctab data" error during shader compilation
+float3 dirLightsDirection[MAX_DIR_LIGHTS];
+float4 dirLightsColor[MAX_DIR_LIGHTS];
+float  dirLightsIntensity[MAX_DIR_LIGHTS];
 
 float Vec3LenghtSquared(float3 vec)
 {
@@ -95,6 +105,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	output.Normal = normal;
 
 	float4 resultColor = output.Color;
+
 	[unroll]
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
@@ -132,35 +143,23 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 			float eps = spotLightsInnerCutoff[i] - spotLightsOuterCutoff[i];
 			float intensity = saturate((theta-spotLightsOuterCutoff[i])/eps);
-				//do calculations
+			//do calculations
 				
 				
-					float distance = sqrt(distanceSq);
-					float du = distance/(1-distanceSq/(radius*radius -1));
-					float denom = du / abs(radius) + 1;
-					float attenuetion = 1/(denom*denom);
+			float distance = sqrt(distanceSq);
+			float du = distance/(1-distanceSq/(radius*radius -1));
+			float denom = du / abs(radius) + 1;
+			float attenuetion = 1/(denom*denom);
 
-					spotLightDirection /= distance;
-					resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*(spotLightsIntensity[i]*intensity ) * attenuetion;
-			
+			spotLightDirection /= distance;
+			resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*(spotLightsIntensity[i]*intensity ) * attenuetion;
 		}
 	}
+
 
 	output.Color += resultColor;
 
 	return output;
-}
-
-
-
-float3 CalculatePointLight(float3 pointLightColor,float3 pointLightLocation,float pointLightIntensity, VertexShaderOutput input)
-{
-	float3 pointLightDirection = input.WorldPos - pointLightLocation;
-	float distanceSq = Vec3LenghtSquared(pointLightDirection);
-
-	float distance = sqrt(distanceSq);
-	pointLightDirection /= distance;
-	return pointLightColor*pointLightIntensity*1*cos(clamp(dot(input.Normal,pointLightDirection),0,1));
 }
 
 float4 MainPS(VertexShaderOutput input) : COLOR
