@@ -230,6 +230,8 @@ namespace RetroShooter
                     CurrentlyActiveSpotLights.Add(actor as SpotLight);
                 }
             }
+
+            GetActor("spotlight1").Rotation += new Vector3(gameTime.ElapsedGameTime.Milliseconds / 10, 0, 0);
             
             if (PointLightsDirty)
             {
