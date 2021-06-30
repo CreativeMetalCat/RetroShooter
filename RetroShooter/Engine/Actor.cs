@@ -222,7 +222,5 @@ namespace RetroShooter.Engine
                 component?.Draw(deltaTime);
             }
         }
-        
-        
     }
 }

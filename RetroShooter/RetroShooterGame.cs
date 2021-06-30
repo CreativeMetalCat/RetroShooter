@@ -304,6 +304,25 @@ namespace RetroShooter
             {
                 IsSpaceDown = false;
             }
+
+            for (int i = actors.Count - 1; i > -1; i--)
+            {
+                if (!actors[i].Valid)
+                {
+                    //delete actor
+                    actors.RemoveAt(i);
+
+                    if (actors[i] is PointLight)
+                    {
+                        CurrentlyActivePointLights.Remove(actors[i] as PointLight);
+                    }
+                    if (actors[i] is SpotLight)
+                    {
+                        CurrentlyActiveSpotLights.Remove(actors[i] as SpotLight);
+                    }
+                }
+            }
+            
         }
 
         protected override void Draw(GameTime gameTime)
