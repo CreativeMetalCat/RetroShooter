@@ -5,6 +5,7 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using RetroShooter.Engine.Helpers;
 
 namespace RetroShooter.Engine.Material
 {
@@ -66,7 +67,7 @@ namespace RetroShooter.Engine.Material
 
                 if (effectName != "BasicEffect")
                 {
-                    _effect = game.Content.Load<Effect>("Effects/"+effectName);
+                    _effect = game.Content.Load<Effect>("Effects/" + effectName);
                     //save variables for faster access
                     //point lights
                     _pointLightColors = _effect.Parameters["pointLightsColor"];
@@ -82,14 +83,14 @@ namespace RetroShooter.Engine.Material
                     _spotLightsRadius = _effect.Parameters["spotLightsRadius"];
                     _spotLightsInnerCutoff = _effect.Parameters["spotLightsInnerCutoff"];
                     _spotLightsOuterCutoff = _effect.Parameters["spotLightsOuterCutoff"];
-                    
+
                     //directional lights
                     _dirLightColors = _effect.Parameters["dirLightsColor"];
                     _dirLightsDirection = _effect.Parameters["dirLightsDirection"];
                     _dirLightsIntensity = _effect.Parameters["dirLightsIntensity"];
                 }
 
-                
+
                 var textures = doc.DocumentElement.SelectSingleNode("/Material/Textures");
                 try
                 {
@@ -104,7 +105,7 @@ namespace RetroShooter.Engine.Material
                                     /*if texture is null then it will throw null exception and be ignored*/
                                     game.Content.Load<Texture2D>(texture
                                         .InnerText));
-                                
+
                                 //variable is created separately to avoid putting null variable into the material
                                 Variables.Add(mat);
                             }
@@ -115,6 +116,140 @@ namespace RetroShooter.Engine.Material
                             Debug.Print(e.Message);
                         }
 
+                    }
+
+                    var texParams = doc.DocumentElement.SelectSingleNode("/Material/Params");
+                    if (texParams != null)
+                    {
+                        foreach (XmlElement param in texParams.ChildNodes)
+                        {
+                            try
+                            {
+                                MatVariable matVar;
+                                switch (param.Attributes["type"].InnerText)
+                                {
+                                    case "int":
+                                        if (param.Attributes["array"] != null && param.Attributes["array"].InnerText == "true")
+                                        {
+                                            //iterate over each child and read the value
+                                            int[] values = new int[param.ChildNodes.Count];
+                                            int id = 0;
+                                            foreach (XmlNode arrayParam in param.ChildNodes)
+                                            {
+                                                values[id] = int.Parse(arrayParam.InnerText);
+                                                id++;
+                                            }
+
+                                            matVar = new MatVariable(param.Name, values);
+                                        }
+                                        else
+                                        {
+                                            matVar = new MatVariable(param.Name, int.Parse(param.InnerText));
+                                        }
+
+                                        break;
+                                    case "float":
+                                        if (param.Attributes["array"] != null && param.Attributes["array"].InnerText == "true")
+                                        {
+                                            //iterate over each child and read the value
+                                            float[] values = new float[param.ChildNodes.Count];
+                                            int id = 0;
+                                            foreach (XmlNode arrayParam in param.ChildNodes)
+                                            {
+                                                values[id] = float.Parse(arrayParam.InnerText);
+                                                id++;
+                                            }
+
+                                            matVar = new MatVariable(param.Name, values);
+                                        }
+                                        else
+                                        {
+                                            matVar = new MatVariable(param.Name, float.Parse(param.InnerText));
+                                        }
+
+                                        break;
+                                    case "bool":
+                                        matVar = new MatVariable(param.Name, bool.Parse(param.InnerText));
+                                        break;
+                                    case "vec2":
+                                        if (param.Attributes["array"] != null && param.Attributes["array"].InnerText == "true")
+                                        {
+                                            //iterate over each child and read the value
+                                            Vector2[] values = new Vector2[param.ChildNodes.Count];
+                                            int id = 0;
+                                            foreach (XmlNode arrayParam in param.ChildNodes)
+                                            {
+                                                float[] vec2 = XmlHelpers.VectorStringToArray(param.InnerText);
+                                                values[id] = new Vector2(vec2[0], vec2[1]);
+                                                id++;
+                                            }
+
+                                            matVar = new MatVariable(param.Name, values);
+                                        }
+                                        else
+                                        {
+                                            float[] vec2 = XmlHelpers.VectorStringToArray(param.InnerText);
+                                            matVar = new MatVariable(param.InnerText, new Vector2(vec2[0], vec2[1]));
+                                        }
+
+                                        break;
+                                    case "vec3":
+                                        if (param.Attributes["array"] != null && param.Attributes["array"].InnerText == "true")
+                                        {
+                                            //iterate over each child and read the value
+                                            Vector3[] values = new Vector3[param.ChildNodes.Count];
+                                            int id = 0;
+                                            foreach (XmlNode arrayParam in param.ChildNodes)
+                                            {
+                                                values[id] = XmlHelpers.VectorStringToVec3(param.InnerText);
+                                                id++;
+                                            }
+
+                                            matVar = new MatVariable(param.Name, values);
+                                        }
+                                        else
+                                        {
+                                            matVar = new MatVariable(param.Name,
+                                                XmlHelpers.VectorStringToVec3(param.InnerText));
+                                        }
+
+                                        break;
+                                    case "vec4":
+                                        if (param.Attributes["array"] != null && param.Attributes["array"].InnerText == "true")
+                                        {
+                                            //iterate over each child and read the value
+                                            Vector4[] values = new Vector4[param.ChildNodes.Count];
+                                            int id = 0;
+                                            foreach (XmlNode arrayParam in param.ChildNodes)
+                                            {
+                                                values[id] = XmlHelpers.VectorStringToVec4(param.InnerText);
+                                                id++;
+                                            }
+
+                                            matVar = new MatVariable(param.Name, values);
+                                        }
+                                        else
+                                        {
+                                            matVar = new MatVariable(param.Name,
+                                                XmlHelpers.VectorStringToVec4(param.InnerText));
+                                        }
+
+                                        break;
+                                    //other types need special parses
+                                    //TODO: Add parsers for types for arrays
+                                    default:
+                                        matVar = new MatVariable("null", false);
+                                        break;
+                                }
+
+                                Variables.Add(matVar);
+                            }
+                            catch (Exception e)
+                            {
+                                game?.AddDebugMessage(e.Message, 0, Color.Red);
+                            }
+
+                        }
                     }
                 }
                 catch (Exception e)
