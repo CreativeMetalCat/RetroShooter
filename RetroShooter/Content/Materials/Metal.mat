@@ -7,5 +7,6 @@
  </Textures>
 <Params>
   <Shininess type="float">10</Shininess>
+  <UseSpecularMap type="bool">false</UseSpecularMap>
 </Params>
 </Material>
