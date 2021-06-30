@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Level name="test" version = "0.0.1">
     <Data>
-        <AmbientLightColor>0,1 0,1 0,1 1</AmbientLightColor>
+        <AmbientLightColor>1 1 1 1</AmbientLightColor>
         <AmbientLightIntensity>1</AmbientLightIntensity>
     </Data>
     <Actors>
@@ -126,8 +126,8 @@
         </Actor>
         <Actor name = "spotlight1" type="RetroShooter.Engine.Lighting.SpotLight" >
             
-            <Location>0 0 0</Location>
-            <Rotation>0 0 0</Rotation>
+            <Location>500 100 50</Location>
+            <Rotation>90 0 0</Rotation>
             <Color>1 0 0 1</Color>
             <Intensity>5</Intensity>
             <Radius>1000</Radius>
@@ -137,6 +137,13 @@
              <Owner>light2</Owner>
             <Location>50 0 0</Location>
             <Rotation>0 0 0</Rotation>
+        </Actor>
+
+        <Actor name = "mesh" type="RetroShooter.Engine.Basic.MeshActor" >
+            <Owner>spotlight1</Owner>
+            <Location>0 0 0</Location>
+            <Rotation>0 0 0</Rotation>
+            <ModelName>SM_debugShape1</ModelName>
         </Actor>
     </Actors>
 </Level>

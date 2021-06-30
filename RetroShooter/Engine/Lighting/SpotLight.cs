@@ -28,11 +28,5 @@ namespace RetroShooter.Engine.Lighting
                 Radius = float.Parse(xmlNode["Radius"].InnerText);
             }
         }
-
-        public override void ApplyLightData(Effect effect, int lightId)
-        {
-            base.ApplyLightData(effect, lightId);
-            
-        }
     }
 }

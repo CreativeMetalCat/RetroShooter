@@ -24,27 +24,5 @@ namespace RetroShooter.Engine.Lighting
                 radius = MathF.Abs(float.Parse(xmlNode["Radius"].InnerText));
             }
         }
-
-        public override void ApplyLightData(Effect effect, int lightId)
-        {
-            base.ApplyLightData(effect, lightId);
-            effect.Parameters["pointLightsColor"]?.Elements[lightId].SetValue(LightColor);
-            effect.Parameters["pointLightsLocation"]?.Elements[lightId].SetValue(Location);
-            effect.Parameters["pointLightsIntensity"]?.Elements[lightId].SetValue(Intensity);
-            effect.Parameters["pointLightsValid"]?.Elements[lightId].SetValue(true);
-            effect.Parameters["pointLightsRadius"]?.Elements[lightId].SetValue(Radius);
-        }
-
-        public override void Update(float deltaTime)
-        {
-            base.Update(deltaTime);
-            time += deltaTime;
-            if (time > 64)
-            {
-                Location += new Vector3(-deltaTime / 50f, 0, -deltaTime / 100f);
-                if (game != null) game.PointLightsDirty = true;
-                time = 0;
-            }
-        }
     }
 }

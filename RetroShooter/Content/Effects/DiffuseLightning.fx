@@ -121,7 +121,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	for(int i = 0; i < MAX_SPOT_LIGHTS; i++)
 	{
 		[branch]
-		if(spotLightsValid[i] == true)
+		if(spotLightsIntensity[i] > 0)
 		{
 			float3 spotLightDirection = output.WorldPos - spotLightsLocation[i];
 			float theta = dot(spotLightDirection,normalize(-spotLightsDirection[i]));

@@ -34,11 +34,5 @@ namespace RetroShooter.Engine.Lighting
                 Intensity = float.Parse(xmlNode["Intensity"].InnerText);
             }
         }
-
-        public virtual void ApplyLightData(Effect effect,int lightId)
-        {
-            
-        }
-        
     }
 }

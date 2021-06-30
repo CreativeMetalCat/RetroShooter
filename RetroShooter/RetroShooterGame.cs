@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroShooter.Engine;
+using RetroShooter.Engine.Basic;
 using RetroShooter.Engine.Camera;
 using RetroShooter.Engine.Lighting;
 using RetroShooter.Engine.Material;
@@ -229,7 +230,7 @@ namespace RetroShooter
                     CurrentlyActiveSpotLights.Add(actor as SpotLight);
                 }
             }
-
+            
             if (PointLightsDirty)
             {
                 //this value MUST match MAX_POINT_LIGHTS in effect used by this material
