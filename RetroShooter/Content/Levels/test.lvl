@@ -127,6 +127,17 @@
             <Rotation>0 0 0</Rotation>
             <ModelName>SM_debugShape1</ModelName>
         </Actor>
+         <Actor name = "spotlight1" type="RetroShooter.Engine.Lighting.SpotLight" >
+            
+            <Location>200 200 100</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>1 0 0 1</Color>
+            <Intensity>1</Intensity>
+            <Radius>1000</Radius>
+            <InnerConeAngle>25</InnerConeAngle>
+            <OuterConeAngle>12,5</OuterConeAngle>
+        </Actor>
+        
         <Actor name = "sun" type="RetroShooter.Engine.Lighting.DirectionalLight" >
             <Location>0 0 0</Location>
             <Rotation>0 0 0</Rotation>
@@ -134,7 +145,7 @@
             <Intensity>0</Intensity>
         </Actor>
         <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
-            <Location>0 0 0</Location>
+            <Location>100 100 100</Location>
             <Rotation>90 0 0</Rotation>
             <Color>1 0 1 1</Color>
             <Intensity>1</Intensity>

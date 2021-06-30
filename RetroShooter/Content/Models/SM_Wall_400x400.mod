@@ -2,6 +2,6 @@
 <Model version="0.0.1">
     <Mesh>Models/Wall_400x400</Mesh>
     <Materials>
-        <Material>BaseMaterial</Material>
+        <Material>Metal</Material>
     </Materials>
 </Model>
