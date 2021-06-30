@@ -30,7 +30,7 @@ float4x4 WorldInverseTranspose;
 float4 AmbientLightColor;
 float AmbientLightIntensity;
 
-float Shininess;
+float Shininess = 0;
 bool UseSpecularMap;
 
 texture BaseTexture;
@@ -144,8 +144,8 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
 				pointLightDirection /= distance;
 				float dotProduct = dot(input.Normal,-pointLightDirection);
-				resultColor += saturate(dotProduct) * pointLightsColor[i] * pointLightsIntensity[i] * attenuetion;	
-				specularColor += (1-tex2D(textureSamplerSpecular, input.TextureCoordinate).a)*pow(dotProduct,Shininess);
+				resultColor += (saturate(dotProduct) * pointLightsColor[i] * pointLightsIntensity[i] * attenuetion);
+				specularColor += tex2D(textureSamplerSpecular,input.TextureCoordinate).r*pointLightsColor[i] *pow(saturate(dotProduct),Shininess);
 			}
 		}
 				
@@ -175,17 +175,16 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
 			spotLightDirection /= distance;
 			float dotProduct = dot(input.Normal,-spotLightDirection);
-			resultColor += saturate(dotProduct)* spotLightsColor[i]*(spotLightsIntensity[i]*intensity ) * attenuetion;
-			specularColor += (1-tex2D(textureSamplerSpecular, input.TextureCoordinate).a)*pow(dotProduct,Shininess);
+			resultColor += saturate(dotProduct)* spotLightsColor[i]*spotLightsIntensity[i]*intensity  * attenuetion;
+			specularColor += tex2D(textureSamplerSpecular,input.TextureCoordinate).r*spotLightsColor[i]*pow(saturate(dotProduct),Shininess);
 		}
 	}
 	for(int d = 0; d < MAX_DIR_LIGHTS; d++)
 	{
 		float dotProduct = dot(input.Normal,-normalize(-dirLightsDirection[d]));
 		resultColor += saturate(dotProduct)*dirLightsColor[d]*dirLightsIntensity[d];	
-		//specularColor += (1-tex2D(textureSamplerSpecular, input.TextureCoordinate).a)*pow(dotProduct,Shininess);
 	}
-	return (input.Color + resultColor + specularColor) * tex2D(textureSampler, input.TextureCoordinate);
+	return saturate((input.Color + resultColor ) * tex2D(textureSampler, input.TextureCoordinate)+ specularColor);
 }
 
 technique BasicTexture

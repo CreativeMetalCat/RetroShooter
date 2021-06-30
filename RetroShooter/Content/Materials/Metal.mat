@@ -6,6 +6,6 @@
   <Texure type="SpecularTexture">Textures/Metal/Metal021_1K_Metalness</Texure>
  </Textures>
 <Params>
-  <Shininess type="float">2</Shininess>
+  <Shininess type="float">10</Shininess>
 </Params>
 </Material>
