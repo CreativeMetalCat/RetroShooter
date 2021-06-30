@@ -11,7 +11,7 @@
 static const int MAX_POINT_LIGHTS  = 16;
 
 //Change this value depending on how much spot lights you might have in one place in your project
-#define MAX_SPOT_LIGHTS 8
+static const int MAX_SPOT_LIGHTS  = 16;
 
 //Directional light can only have one ACTIVE instance per scene
 
@@ -60,6 +60,15 @@ float pointLightsIntensity[MAX_POINT_LIGHTS];
 float pointLightsRadius[MAX_POINT_LIGHTS];
 bool pointLightsValid[MAX_POINT_LIGHTS];
 
+//spotlights data. Not using structs because they tend to cause "shader has corrupt ctab data" error during shader compilation
+float4 spotLightsColor[MAX_SPOT_LIGHTS];
+float3 spotLightsLocation[MAX_SPOT_LIGHTS];
+float3 spotLightsDirection[MAX_SPOT_LIGHTS];
+float spotLightsIntensity[MAX_SPOT_LIGHTS];
+float spotLightsRadius[MAX_SPOT_LIGHTS];
+float spotLightsCutoff[MAX_SPOT_LIGHTS];
+bool spotLightsValid[MAX_SPOT_LIGHTS];
+
 float Vec3LenghtSquared(float3 vec)
 {
 	return vec.x*vec.x+vec.y*vec.y+vec.z*vec.z;
@@ -85,13 +94,15 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 	output.Normal = normal;
 
 	float4 resultColor = output.Color;
+	[unroll]
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
-		if(pointLightsValid[i] == true)
+		if(pointLightsIntensity[i] > 0)
 		{
 			float3 pointLightDirection = output.WorldPos - pointLightsLocation[i];
 			float distanceSq = Vec3LenghtSquared(pointLightDirection);
 			float radius = pointLightsRadius[i];
+			[branch]
 			if(distanceSq < abs(radius*radius))
 			{
 				float distance = sqrt(distanceSq);
@@ -100,11 +111,40 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 				float attenuetion = 1/(denom*denom);
 
 				pointLightDirection /= distance;
-				resultColor +=saturate(dot(normal,-pointLightDirection))* pointLightsColor[i]*pointLightsIntensity[i] * attenuetion;	
+				resultColor += saturate(dot(normal,-pointLightDirection)) * pointLightsColor[i] * pointLightsIntensity[i] * attenuetion;	
 			}
 		}
 				
 	}
+
+	[unroll]
+	for(int i = 0; i < MAX_SPOT_LIGHTS; i++)
+	{
+		[branch]
+		if(spotLightsIntensity[i] > 0)
+		{
+			float3 spotLightDirection = output.WorldPos - spotLightsLocation[i];
+			float theta = dot(spotLightDirection,normalize(-spotLightsDirection[i]));
+
+			float distanceSq = Vec3LenghtSquared(spotLightDirection);
+			float radius = spotLightsRadius[i];
+
+			if( theta > spotLightsCutoff[i])
+			{
+				//do calculations
+				
+				
+					float distance = sqrt(distanceSq);
+					float du = distance/(1-distanceSq/(radius*radius -1));
+					float denom = du / abs(radius) + 1;
+					float attenuetion = 1/(denom*denom);
+
+					spotLightDirection /= distance;
+					resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*spotLightsIntensity[i] * attenuetion;	
+			}
+		}
+	}
+
 	output.Color += resultColor;
 
 	return output;

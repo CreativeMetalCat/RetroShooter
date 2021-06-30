@@ -13,12 +13,25 @@ namespace RetroShooter.Engine.Material
     /**
      * Material handles loading data from material file into the game and handles applying of the default variables
      */
-    public class Material
+    public sealed  class Material
     {
+       
         public List<MatVariable> Variables = new List<MatVariable>();
 
         private Effect _effect;
 
+        private EffectParameter _pointLightColors;
+        private EffectParameter _pointLightsLocation;
+        private EffectParameter _pointLightsIntensity;
+        private EffectParameter _pointLightsRadius;
+
+        private EffectParameter _spotLightsColor;
+        private EffectParameter _spotLightsLocation;
+        private EffectParameter _spotLightsDirection;
+        private EffectParameter _spotLightsIntensity;
+        private EffectParameter _spotLightsRadius;
+        private EffectParameter _spotLightsCutoff;
+        
         public Effect Effect
         {
             get => _effect;
@@ -49,8 +62,23 @@ namespace RetroShooter.Engine.Material
                 if (effectName != "BasicEffect")
                 {
                     _effect = game.Content.Load<Effect>("Effects/"+effectName);
+                    //save variables for faster access
+                    //point lights
+                    _pointLightColors = _effect.Parameters["pointLightsColor"];
+                    _pointLightsLocation = _effect.Parameters["pointLightsLocation"];
+                    _pointLightsIntensity = _effect.Parameters["pointLightsIntensity"];
+                    _pointLightsRadius = _effect.Parameters["pointLightsRadius"];
+
+                    //spotlights
+                    _spotLightsColor = _effect.Parameters["spotLightsColor"];
+                    _spotLightsLocation = _effect.Parameters["spotLightsLocation"];
+                    _spotLightsDirection = _effect.Parameters["spotLightsDirection"];
+                    _spotLightsIntensity = _effect.Parameters["spotLightsIntensity"];
+                    _spotLightsRadius = _effect.Parameters["spotLightsRadius"];
+                    _spotLightsCutoff = _effect.Parameters["spotLightsCutoff"];
                 }
 
+                
                 var textures = doc.DocumentElement.SelectSingleNode("/Material/Textures");
                 try
                 {
@@ -106,23 +134,23 @@ namespace RetroShooter.Engine.Material
 
                 _effect.Parameters["AmbientLightColor"]?.SetValue(game.CurrentAmbientLightColor);
 
-                //this value MUST match MAX_POINT_LIGHTS in effect used by this material
-                for (int i = 0; i < 16; i++)
+
+                if (game.PointLightsDirty)
                 {
-                    //this means that i is in range of the lights
-                    if (game.CurrentlyActivePointLights.Count > i)
-                    {
-                        game.CurrentlyActivePointLights[i].ApplyLightData(_effect, i);
-                    }
-                    //this means that i is outside of the range and that we need to place fake lights(lights that will not be calculated)
-                    else
-                    {
-                        _effect.Parameters["pointLightsColor"]?.Elements[i].SetValue(Vector4.Zero);
-                        _effect.Parameters["pointLightsLocation"]?.Elements[i].SetValue(Vector3.Zero);
-                        _effect.Parameters["pointLightsIntensity"]?.Elements[i].SetValue(0f);
-                        _effect.Parameters["pointLightsRadius"]?.Elements[i].SetValue(0f);
-                        _effect.Parameters["pointLightsValid"]?.Elements[i].SetValue(false);
-                    }
+                    _pointLightColors?.SetValue(game.PointColors);
+                    _pointLightsLocation?.SetValue(game.PointLocations);
+                    _pointLightsIntensity?.SetValue(game.PointIntensities);
+                    _pointLightsRadius?.SetValue(game.PointRadii);
+                }
+
+                if (game.SpotlightsDirty)
+                {
+                    _spotLightsColor?.SetValue(game.SpotColors);
+                    _spotLightsLocation?.SetValue(game.SpotLocations);
+                    _spotLightsIntensity?.SetValue(game.SpotIntensities);
+                    _spotLightsRadius?.SetValue(game.SpotRadii);
+                    _spotLightsDirection?.SetValue(game.SpotDirections);
+                    _spotLightsCutoff?.SetValue(game.SpotCutoffs);
                 }
                 
                 foreach (MatVariable variable in Variables)

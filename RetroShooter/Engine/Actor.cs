@@ -72,6 +72,11 @@ namespace RetroShooter.Engine
             {
                Rotation = Helpers.XmlHelpers.VectorStringToVec3(xmlNode["Rotation"].InnerText);
             }
+
+            if (xmlNode["Owner"] != null && game != null)
+            {
+                owner = game.GetActor(xmlNode["Owner"].InnerText);
+            }
         }
 
         /*
@@ -107,29 +112,29 @@ namespace RetroShooter.Engine
         /**
          * Location
          */
-        public Vector3 Location
+        public virtual Vector3 Location
         {
-            get => location + (owner?.location ?? Vector3.Zero);
+            get => location + (owner?.Location ?? Vector3.Zero);
             set
             {
-                location = value;
+                location = value - (owner?.Location ?? Vector3.Zero);
                 RecalculateTransformMatrix();
             }
         }
 
-        public Vector3 Rotation
+        public virtual Vector3 Rotation
         {
-            get => rotation + (owner?.rotation ?? Vector3.Zero);
+            get => rotation + (owner?.Rotation ?? Vector3.Zero);
             set
             {
-                rotation = value;
+                rotation = value - (owner?.Rotation ?? Vector3.Zero);
                 RecalculateTransformMatrix();
             }
         }
 
-        public Vector3 Scale
+        public virtual Vector3 Scale
         {
-            get => scale + (owner?.scale ?? Vector3.Zero);
+            get => scale + (owner?.Scale ?? Vector3.Zero);
             set => scale = value;
         }
 
@@ -202,20 +207,6 @@ namespace RetroShooter.Engine
         public override void Update(float deltaTime)
         {
             base.Update(deltaTime);
-            //should this be calculated each frame?
-            //i mean it's calculated before each frame anyway
-            /* old version of the code
-              public virtual Vector3 ForwardVector
-                {
-                get => new Vector3
-                (
-                    (MathF.Cos(MathHelper.ToRadians(rotation.Y)) * MathF.Sin(MathHelper.ToRadians(rotation.X))),
-                    MathF.Sin(MathHelper.ToRadians(rotation.Y)),
-                    (MathF.Cos(MathHelper.ToRadians(rotation.Y)) * MathF.Sin(MathHelper.ToRadians(rotation.X)))
-                 );
-                }
-             */
-
             RecalculateTransformMatrix();
             
             foreach (Component component in Components)

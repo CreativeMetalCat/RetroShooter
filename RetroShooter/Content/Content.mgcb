@@ -6,7 +6,7 @@
 /platform:DesktopGL
 /config:
 /profile:Reach
-/compress:False
+/compress:True
 
 #-------------------------------- References --------------------------------#
 
@@ -24,7 +24,7 @@
 #begin Effects/TestEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /processorParam:Defines=
 /build:Effects/TestEffect.fx
 
@@ -46,11 +46,33 @@
 /processor:PassThroughProcessor
 /build:Materials/BaseMaterial.xml
 
+#begin Materials/EmptyMaterial.mat
+/copy:Materials/EmptyMaterial.mat
+
 #begin Materials/OldChair.mat
 /copy:Materials/OldChair.mat
 
 #begin Materials/OldTable.mat
 /copy:Materials/OldTable.mat
+
+#begin Models/debugShape1.fbx
+/importer:FbxImporter
+/processor:ModelProcessor
+/processorParam:ColorKeyColor=0,0,0,0
+/processorParam:ColorKeyEnabled=True
+/processorParam:DefaultEffect=BasicEffect
+/processorParam:GenerateMipmaps=True
+/processorParam:GenerateTangentFrames=False
+/processorParam:PremultiplyTextureAlpha=True
+/processorParam:PremultiplyVertexColors=True
+/processorParam:ResizeTexturesToPowerOfTwo=False
+/processorParam:RotationX=0
+/processorParam:RotationY=0
+/processorParam:RotationZ=0
+/processorParam:Scale=1
+/processorParam:SwapWindingOrder=False
+/processorParam:TextureFormat=Compressed
+/build:Models/debugShape1.fbx
 
 #begin Models/Floor_400x400.FBX
 /importer:FbxImporter
@@ -92,6 +114,9 @@
 
 #begin Models/SM_Chair.mod
 /copy:Models/SM_Chair.mod
+
+#begin Models/SM_debugShape1.mod
+/copy:Models/SM_debugShape1.mod
 
 #begin Models/SM_Old_Chair.FBX
 /importer:FbxImporter

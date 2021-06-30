@@ -79,7 +79,7 @@ namespace RetroShooter.Engine.Components
             if (Model != null && material != null)
             {
                 Model.Root.Transform = Owner.TransformMatrix;
-                Owner?.Game?.AddDebugMessage(Model.Root.Transform.Translation.ToString(),0,Color.Aqua);
+                //Owner?.Game?.AddDebugMessage(Model.Root.Transform.Translation.ToString(),0,Color.Aqua);
                 foreach (var mesh in Model.Meshes)
                 {
                     foreach (var meshPart in mesh.MeshParts)

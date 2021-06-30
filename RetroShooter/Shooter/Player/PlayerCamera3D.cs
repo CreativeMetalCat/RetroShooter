@@ -31,7 +31,7 @@ namespace RetroShooter.Shooter.Player
                 Point mouseDelta = Mouse.GetState().Position - new Point(game.GraphicsDevice.DisplayMode.Width / 2,
                     game.GraphicsDevice.DisplayMode.Height / 2);
                 Rotation += new Vector3(-mouseDelta.Y, -mouseDelta.X, 0) * MouseSpeed;
-
+                
                 Mouse.SetPosition(game.GraphicsDevice.DisplayMode.Width / 2,
                     game.GraphicsDevice.DisplayMode.Height / 2);
 
