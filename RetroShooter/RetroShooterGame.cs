@@ -11,6 +11,7 @@ using RetroShooter.Engine.Lighting;
 using RetroShooter.Engine.Material;
 using RetroShooter.Shooter;
 using RetroShooter.Shooter.Player;
+using DirectionalLight = RetroShooter.Engine.Lighting.DirectionalLight;
 
 namespace RetroShooter
 {
@@ -154,6 +155,39 @@ namespace RetroShooter
 
         #endregion //Spotlights
 
+        #region DirectionalLights
+
+        public const int MAX_DIR_LIGHTS = 2;
+
+        /*
+        * Array of all directional light colors
+        */
+        private Vector4[] _dirColors = new Vector4[MAX_DIR_LIGHTS];
+
+        /*
+        * Array of all directional light directions
+        */
+        private Vector3[] _dirDirections = new Vector3[MAX_DIR_LIGHTS];
+
+        /*
+        * Array of all directional light Intensities
+        */
+        private float[] _dirIntensities = new float[MAX_DIR_LIGHTS];
+
+        public Vector4[] DirColors => _dirColors;
+        public Vector3[] DirDirections => _dirDirections;
+        public float[] DirIntensities => _dirIntensities;
+
+        public bool DirectionalLightDirty = true;
+
+        /*
+         * List of all directional lights in the game
+         * Unlike point or spot lights these all always "Active" and do not get "deactivated"
+         * But it still has to be a list because light can be destroyed during runtime
+         */
+        public List<DirectionalLight> DirectionalLights = new List<DirectionalLight>();
+        #endregion
+
         /**
          * Adds actor to the world.
          * If name is already taken or any other error occured => adds number to the end of the actor's name
@@ -234,14 +268,45 @@ namespace RetroShooter
                 {
                     CurrentlyActiveSpotLights.Add(actor as SpotLight);
                 }
-            }
 
-            GetActor("spotlight1").Rotation += new Vector3(gameTime.ElapsedGameTime.Milliseconds / 10, 0, 0);
+                if (!DirectionalLights.Contains(actor as DirectionalLight) && actor is DirectionalLight)
+                {
+                    DirectionalLights.Add(actor as DirectionalLight);
+                }
+            }
+            if (DirectionalLightDirty)
+            {
+                for (int i = 0; i < MAX_DIR_LIGHTS; i++)
+                {
+                    try
+                    {
+                        if (DirectionalLights[i] != null)
+                        {
+                            _dirIntensities[i] = DirectionalLights[i].Intensity;
+                            _dirColors[i] = DirectionalLights[i].LightColor;
+                            _dirDirections[i] = DirectionalLights[i].ForwardVector;
+                        }
+                    }
+                    catch (IndexOutOfRangeException e)
+                    {
+                        _dirIntensities[i] = 0;
+                        _dirColors[i] = Vector4.Zero;
+                        _dirDirections[i] = Vector3.Zero;
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        _dirIntensities[i] = 0;
+                        _dirColors[i] = Vector4.Zero;
+                        _dirDirections[i] = Vector3.Zero;
+                    }
+                }
+                
+            }
             
             if (PointLightsDirty)
             {
                 //this value MUST match MAX_POINT_LIGHTS in effect used by this material
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < MAX_POINT_LIGHTS; i++)
                 {
                     //this means that i is in range of the lights
                     if (CurrentlyActivePointLights.Count > i)
@@ -266,7 +331,7 @@ namespace RetroShooter
             if (SpotlightsDirty)
             {
                 //this value MUST match MAX_SPOT_LIGHTS in effect used by this material
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < MAX_SPOT_LIGHTS; i++)
                 {
                     //this means that i is in range of the lights
                     if (CurrentlyActiveSpotLights.Count > i)
@@ -292,16 +357,6 @@ namespace RetroShooter
                     }
                 }
             }
-
-            AddDebugMessage(currentCamera?.Location.ToString(), 0, Color.Blue);
-            AddDebugMessage(currentCamera?.Rotation.ToString(), 0, Color.Blue);
-
-            GetActor("chair555").Location += new Vector3(0, 0.1f * gameTime.ElapsedGameTime.Milliseconds, 0);
-            //GetActor("chair556").Location += new Vector3(0, 0.1f * gameTime.ElapsedGameTime.Milliseconds, 0);
-
-            AddDebugMessage(GetActor("chair555")?.Location.ToString(), 0, Color.Blue);
-            AddDebugMessage(GetActor("chair555")?.Rotation.ToString(), 0, Color.Blue);
-
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsSpaceDown)
             {
                 IsMouseVisible = !IsMouseVisible;
@@ -350,6 +405,7 @@ namespace RetroShooter
             //all of the materials that needed to update light data were updated
             PointLightsDirty = false;
             SpotlightsDirty = false;
+            DirectionalLightDirty = false;
 
             AddDebugMessage(gameTime.ElapsedGameTime.Milliseconds.ToString(), 0, Color.Blue);
             if (!IsMouseVisible)
