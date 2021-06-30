@@ -125,10 +125,14 @@ namespace RetroShooter
         private float[] _spotIntensities = new float[MAX_SPOT_LIGHTS];
 
         /*
-       * Array of all spot light Intensities
+       * Array of all spot light InnerCutoffs
        */
-        private float[] _spotCutoffs = new float[MAX_SPOT_LIGHTS];
+        private float[] _spotInnerCutoffs = new float[MAX_SPOT_LIGHTS];
 
+        /*
+       * Array of all spot light OuterCutoffs
+       */
+        private float[] _spotOuterCutoffs = new float[MAX_SPOT_LIGHTS];
         /*
         * Array of all spot light radii
         */
@@ -138,7 +142,8 @@ namespace RetroShooter
         public Vector3[] SpotLocations => _spotLocations;
         public float[] SpotIntensities => _spotIntensities;
         public float[] SpotRadii => _spotRadii;
-        public float[] SpotCutoffs => _spotCutoffs;
+        public float[] SpotInnerCutoffs => _spotInnerCutoffs;
+        public float[] SpotOuterCutoffs => _spotOuterCutoffs;
 
         public Vector3[] SpotDirections => _spotDirections;
 
@@ -271,7 +276,8 @@ namespace RetroShooter
                         _spotDirections[i] = CurrentlyActiveSpotLights[i].ForwardVector;
                         _spotIntensities[i] = CurrentlyActiveSpotLights[i].Intensity;
                         _spotRadii[i] = CurrentlyActiveSpotLights[i].Radius;
-                        _spotCutoffs[i] = MathF.Cos(CurrentlyActiveSpotLights[i].ConeAngle);
+                        _spotInnerCutoffs[i] = MathF.Cos(CurrentlyActiveSpotLights[i].InnerConeAngle);
+                        _spotOuterCutoffs[i] = MathF.Cos(CurrentlyActiveSpotLights[i].OuterConeAngle);
                     }
                     //this means that i is outside of the range and that we need to place fake lights(lights that will not be calculated)
                     else
@@ -281,7 +287,8 @@ namespace RetroShooter
                         _spotDirections[i] = Vector3.Zero;
                         _spotIntensities[i] = 0;
                         _spotRadii[i] = 0;
-                        _spotCutoffs[i] = 0;
+                        _spotInnerCutoffs[i] = 0;
+                        _spotOuterCutoffs[i] = 0;
                     }
                 }
             }

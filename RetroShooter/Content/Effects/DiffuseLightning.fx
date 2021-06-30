@@ -66,7 +66,8 @@ float3 spotLightsLocation[MAX_SPOT_LIGHTS];
 float3 spotLightsDirection[MAX_SPOT_LIGHTS];
 float spotLightsIntensity[MAX_SPOT_LIGHTS];
 float spotLightsRadius[MAX_SPOT_LIGHTS];
-float spotLightsCutoff[MAX_SPOT_LIGHTS];
+float spotLightsInnerCutoff[MAX_SPOT_LIGHTS];
+float spotLightsOuterCutoff[MAX_SPOT_LIGHTS];
 bool spotLightsValid[MAX_SPOT_LIGHTS];
 
 float Vec3LenghtSquared(float3 vec)
@@ -129,8 +130,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 			float distanceSq = Vec3LenghtSquared(spotLightDirection);
 			float radius = spotLightsRadius[i];
 
-			if( theta > spotLightsCutoff[i])
-			{
+			float eps = spotLightsInnerCutoff[i] - spotLightsOuterCutoff[i];
+			float intensity = saturate((theta-spotLightsOuterCutoff[i])/eps);
 				//do calculations
 				
 				
@@ -140,8 +141,8 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 					float attenuetion = 1/(denom*denom);
 
 					spotLightDirection /= distance;
-					resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*spotLightsIntensity[i] * attenuetion;	
-			}
+					resultColor += saturate(dot(normal,-spotLightDirection))* spotLightsColor[i]*(spotLightsIntensity[i]*intensity ) * attenuetion;
+			
 		}
 	}
 
