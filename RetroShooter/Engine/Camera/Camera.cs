@@ -31,6 +31,13 @@ namespace RetroShooter.Engine.Camera
         {
             get
             {
+                Vector3 loc;
+                Quaternion rot;
+                Vector3 scale;
+                if (transformMatrix.Decompose(out scale,out rot,out loc))
+                {
+                
+                }
                 float cosPitch = MathF.Cos(MathHelper.ToRadians(rotation.X));
                 float sinPitch = MathF.Sin(MathHelper.ToRadians(rotation.X));
 
@@ -45,13 +52,15 @@ namespace RetroShooter.Engine.Camera
                     new Vector4(xAxis.X,yAxis.X,zAxis.X,0),
                     new Vector4(xAxis.Y,yAxis.Y,zAxis.Y,0),
                     new Vector4(xAxis.Z,yAxis.Z,zAxis.Z,0),
-                    new Vector4(-Vector3.Dot(xAxis,location),-Vector3.Dot(yAxis,location),-Vector3.Dot(zAxis,location),1)
+                    new Vector4(-Vector3.Dot(xAxis,loc),-Vector3.Dot(yAxis,location),-Vector3.Dot(zAxis,location),1)
                 );
             }
         }
-
-        public Matrix WorldMatrix => worldMatrix;
-
+       /*public Matrix ViewMatrix =>
+            Matrix.CreateLookAt(TransformMatrix.Translation, TransformMatrix.Translation + TransformMatrix.Forward, TransformMatrix.Up);
+*/
+       public Matrix WorldMatrix => Matrix.CreateWorld(TransformMatrix.Translation,TransformMatrix.Forward,Vector3.Up);
+        //public Matrix WorldMatrix => worldMatrix;
         public override void Init()
         {
             
@@ -63,7 +72,7 @@ namespace RetroShooter.Engine.Camera
                 1f,
                 1000f
             );
-            worldMatrix = Matrix.CreateWorld(location, Vector3.Forward, Vector3.Up);
+            worldMatrix = Matrix.CreateWorld(Vector3.Zero,Vector3.Forward, Vector3.Up);
         }
     }
 }

@@ -79,7 +79,7 @@
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
 /processorParam:GenerateMipmaps=True
-/processorParam:GenerateTangentFrames=False
+/processorParam:GenerateTangentFrames=True
 /processorParam:PremultiplyTextureAlpha=True
 /processorParam:PremultiplyVertexColors=True
 /processorParam:ResizeTexturesToPowerOfTwo=False
@@ -231,7 +231,7 @@
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
+/processorParam:ColorKeyEnabled=False
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
@@ -250,6 +250,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Metal/Metal021_1K_Roughness.jpg
+
+#begin Textures/NormalMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=False
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/NormalMap.png
 
 #begin Textures/T_Bricks.png
 /importer:TextureImporter

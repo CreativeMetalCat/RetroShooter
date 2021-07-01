@@ -129,7 +129,7 @@
         </Actor>
          <Actor name = "spotlight1" type="RetroShooter.Engine.Lighting.SpotLight" >
             
-            <Location>200 200 100</Location>
+            <Location>-500 200 100</Location>
             <Rotation>90 0 0</Rotation>
             <Color>1 0 0 1</Color>
             <Intensity>1</Intensity>
@@ -145,10 +145,11 @@
             <Intensity>0</Intensity>
         </Actor>
         <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
-            <Location>100 100 100</Location>
+            <Owner>player</Owner>
+            <Location>0 0 0</Location>
             <Rotation>90 0 0</Rotation>
-            <Color>1 0 1 1</Color>
-            <Intensity>1</Intensity>
+            <Color>1 1 1 1</Color>
+            <Intensity>2</Intensity>
             <Radius>500</Radius>
         </Actor>
     </Actors>

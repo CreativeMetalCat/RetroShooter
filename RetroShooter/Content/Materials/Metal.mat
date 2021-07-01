@@ -4,9 +4,10 @@
  <Textures>
   <Texure type="BaseTexture">Textures/Metal/Metal021_1K_Color</Texure>
   <Texure type="SpecularTexture">Textures/Metal/Metal021_1K_Metalness</Texure>
+  <Texure type="NormalTexture">Textures/NormalMap</Texure>
  </Textures>
 <Params>
   <Shininess type="float">10</Shininess>
-  <UseSpecularMap type="bool">false</UseSpecularMap>
+  <UseSpecularMap type="bool">true</UseSpecularMap>
 </Params>
 </Material>

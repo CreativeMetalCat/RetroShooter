@@ -27,6 +27,8 @@ float4x4 View;
 float4x4 Projection;
 float4x4 WorldInverseTranspose;
 
+float3 ViewVector = float3(1,0,0);
+
 float4 AmbientLightColor;
 float AmbientLightIntensity;
 
@@ -35,6 +37,9 @@ bool UseSpecularMap;
 
 texture BaseTexture;
 texture SpecualTexture;
+texture NormalTexture;
+
+float bumpConstant = 5;
 
 sampler2D textureSampler = sampler_state
 {
@@ -55,11 +60,22 @@ sampler2D textureSamplerSpecular = sampler_state
 	AddressV = Wrap;
 };
 
+sampler2D textureSamplerNormal = sampler_state
+{
+	Texture = (NormalTexture);
+	MagFilter = Linear;
+	MinFilter = Linear;
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
 struct VertexShaderInput
 {
 	float4 Position : POSITION0;
 	float4 Color : COLOR0;
 	float2 TextureCoordinate:TEXCOORD0;
+	float3 Tangent : TANGENT0;
+    float3 Binormal : BINORMAL0;
 	float4 Normal:NORMAL0;
 };
 
@@ -70,6 +86,8 @@ struct VertexShaderOutput
 	float2 TextureCoordinate : TEXCOORD0;
 	float3 WorldPos : TEXCOORD2;
 	float4 Normal:TEXCOORD3;
+	float3 Tangent : TEXCOORD4;
+    float3 Binormal : TEXCOORD5;
 };
 
 //point lights data. Not using structs because they tend to cause "shader has corrupt ctab data" error during shader compilation
@@ -107,21 +125,29 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     float4 viewPosition = mul(worldPosition, View);
 	output.Position = mul(viewPosition,Projection);
 
-	float4 normal = mul(input.Normal,WorldInverseTranspose);
+	float4 normal = mul(input.Normal,World);
 
-	output.WorldPos = mul(input.Position,World).xyz;
+	output.WorldPos = mul(input.Position, World).xyz;
 
 	output.Color = AmbientLightColor*AmbientLightIntensity;
 
+	output.Normal = normalize(mul(input.Normal,World));
+	output.Tangent = normalize(mul(input.Tangent,World));
+	output.Binormal = normalize(mul(input.Binormal,World));
+
 	output.TextureCoordinate = input.TextureCoordinate;
 
-	output.Normal = normal;
+	//output.Normal = normalize(normal);
 
 	return output;
 }
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
+	float3 bump = bumpConstant*(tex2D(textureSamplerNormal,input.TextureCoordinate)) - float4(0.5,0.5,0.5,0);
+	//float3 bumpNormal = input.Normal + (bump.x * input.Tangent + bump.y * input.Binormal);
+	float3 bumpNormal = mul(bump,float3x3(input.Tangent,input.Binormal,input.Normal.xyz));
+    bumpNormal = normalize(bumpNormal);
 	
 	float4 resultColor = float4(0,0,0,0);
 	float4 specularColor = float4(0,0,0,0);
@@ -144,9 +170,12 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
 				pointLightDirection /= distance;
 				float dotProduct = dot(input.Normal,-pointLightDirection);
-				resultColor += (saturate(dotProduct) * pointLightsColor[i] * pointLightsIntensity[i] * attenuetion);
-				
-					specularColor +=  UseSpecularMap?tex2D(textureSamplerSpecular,input.TextureCoordinate).r*pointLightsColor[i] *pow(saturate(dotProduct),Shininess):float4(0,0,0,0);
+				float bumpInt = dot(normalize(pointLightDirection),bumpNormal);
+				float bumpDotProduct = dot(bumpNormal,-pointLightDirection);
+
+				resultColor += (bumpDotProduct*  pointLightsColor[i] * pointLightsIntensity[i] * attenuetion );
+				//resultColor += (/*dotProduct**/  pointLightsColor[i] * pointLightsIntensity[i] * attenuetion )*bumpDotProduct;
+				specularColor +=  UseSpecularMap?tex2D(textureSamplerSpecular,input.TextureCoordinate).r*pointLightsColor[i] *pow(saturate(dotProduct),Shininess):float4(0,0,0,0);
 				
 			}
 		}
@@ -177,9 +206,10 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
 			spotLightDirection /= distance;
 			float dotProduct = dot(input.Normal,-spotLightDirection);
-			resultColor += saturate(dotProduct)* spotLightsColor[i]*spotLightsIntensity[i]*intensity  * attenuetion;
+			float bumpDotProduct = dot(bumpNormal,-spotLightDirection);
+			//resultColor += saturate(bumpDotProduct)* spotLightsColor[i]*spotLightsIntensity[i]*intensity  * attenuetion;
 			
-				specularColor += UseSpecularMap?tex2D(textureSamplerSpecular,input.TextureCoordinate).r*spotLightsColor[i]*pow(saturate(dotProduct),Shininess):float4(0,0,0,0);
+			//specularColor += UseSpecularMap?tex2D(textureSamplerSpecular,input.TextureCoordinate).r*spotLightsColor[i]*pow(saturate(dotProduct),Shininess):float4(0,0,0,0);
 			
 		}
 	}
@@ -188,7 +218,9 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 		float dotProduct = dot(input.Normal,-normalize(-dirLightsDirection[d]));
 		resultColor += saturate(dotProduct)*dirLightsColor[d]*dirLightsIntensity[d];	
 	}
-	return saturate((input.Color + resultColor ) * tex2D(textureSampler, input.TextureCoordinate)+ specularColor);
+	//return saturate((input.Color + resultColor ) * tex2D(textureSampler, input.TextureCoordinate)+ specularColor);
+	//return saturate((input.Color + resultColor ) + specularColor);
+	return  tex2D(textureSampler, input.TextureCoordinate);
 }
 
 technique BasicTexture

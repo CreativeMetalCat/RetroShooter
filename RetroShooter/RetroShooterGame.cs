@@ -233,7 +233,8 @@ namespace RetroShooter
 
             defaultFont = Content.Load<SpriteFont>("bebas_neue");
 
-            currentCamera = AddActor(new PlayerCamera3D("player", LastActorId, this, 0.1f, true));
+            currentCamera =
+                AddActor(new PlayerCamera3D("player", LastActorId, this, 0.1f, true));
 
             World.LoadWorld("Levels/test", this);
 

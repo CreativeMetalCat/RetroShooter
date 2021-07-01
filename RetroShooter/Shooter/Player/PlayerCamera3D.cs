@@ -67,6 +67,8 @@ namespace RetroShooter.Shooter.Player
                     {
                         Location += TransformMatrix.Forward * 1f * deltaTime;
                     }
+
+                    game.PointLightsDirty = true;
                 }
             }
         }
