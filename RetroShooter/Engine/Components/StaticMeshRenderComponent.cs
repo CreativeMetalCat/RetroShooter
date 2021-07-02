@@ -10,7 +10,7 @@ namespace RetroShooter.Engine.Components
      * Component that handles rendering of models that don't have any bones
      * NOTE: This component still can render meshes containing bones but it will just ignore them
      */
-    public class StaticMeshRenderComponent : Component
+    public sealed class StaticMeshRenderComponent : Component
     {
         enum LoadType
         {
@@ -79,7 +79,7 @@ namespace RetroShooter.Engine.Components
             if (Model != null && material != null)
             {
                 Model.Root.Transform = Owner.TransformMatrix;
-                Owner?.Game?.AddDebugMessage(Model.Root.Transform.Translation.ToString(),0,Color.Aqua);
+                //Owner?.Game?.AddDebugMessage(Model.Root.Transform.Translation.ToString(),0,Color.Aqua);
                 foreach (var mesh in Model.Meshes)
                 {
                     foreach (var meshPart in mesh.MeshParts)

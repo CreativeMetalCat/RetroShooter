@@ -6,7 +6,7 @@
 /platform:DesktopGL
 /config:
 /profile:Reach
-/compress:False
+/compress:True
 
 #-------------------------------- References --------------------------------#
 
@@ -14,10 +14,17 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Effects/DiffuseLightning.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Optimize
+/processorParam:Defines=
+/build:Effects/DiffuseLightning.fx
+
 #begin Effects/TestEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
-/processorParam:DebugMode=Auto
+/processorParam:DebugMode=Optimize
 /processorParam:Defines=
 /build:Effects/TestEffect.fx
 
@@ -31,19 +38,51 @@
 #begin Levels/test.lvl
 /copy:Levels/test.lvl
 
+#begin Levels/test_dir_lights.lvl
+/copy:Levels/test_dir_lights.lvl
+
+#begin Levels/test_main_room.lvl
+/copy:Levels/test_main_room.lvl
+
+#begin Levels/test_point_lights.lvl
+/copy:Levels/test_point_lights.lvl
+
+#begin Levels/test_spot_lights.lvl
+/copy:Levels/test_spot_lights.lvl
+
 #begin Materials/BaseMaterial.mat
 /copy:Materials/BaseMaterial.mat
 
-#begin Materials/BaseMaterial.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Materials/BaseMaterial.xml
+#begin Materials/EmptyMaterial.mat
+/copy:Materials/EmptyMaterial.mat
+
+#begin Materials/Metal.mat
+/copy:Materials/Metal.mat
 
 #begin Materials/OldChair.mat
 /copy:Materials/OldChair.mat
 
 #begin Materials/OldTable.mat
 /copy:Materials/OldTable.mat
+
+#begin Models/debugShape1.fbx
+/importer:FbxImporter
+/processor:ModelProcessor
+/processorParam:ColorKeyColor=0,0,0,0
+/processorParam:ColorKeyEnabled=True
+/processorParam:DefaultEffect=BasicEffect
+/processorParam:GenerateMipmaps=True
+/processorParam:GenerateTangentFrames=False
+/processorParam:PremultiplyTextureAlpha=True
+/processorParam:PremultiplyVertexColors=True
+/processorParam:ResizeTexturesToPowerOfTwo=False
+/processorParam:RotationX=0
+/processorParam:RotationY=0
+/processorParam:RotationZ=0
+/processorParam:Scale=1
+/processorParam:SwapWindingOrder=False
+/processorParam:TextureFormat=Compressed
+/build:Models/debugShape1.fbx
 
 #begin Models/Floor_400x400.FBX
 /importer:FbxImporter
@@ -85,6 +124,9 @@
 
 #begin Models/SM_Chair.mod
 /copy:Models/SM_Chair.mod
+
+#begin Models/SM_debugShape1.mod
+/copy:Models/SM_debugShape1.mod
 
 #begin Models/SM_Old_Chair.FBX
 /importer:FbxImporter
@@ -160,6 +202,66 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Grid.png
+
+#begin Textures/Metal/Metal021_1K_Color.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Metal/Metal021_1K_Color.jpg
+
+#begin Textures/Metal/Metal021_1K_Displacement.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Metal/Metal021_1K_Displacement.jpg
+
+#begin Textures/Metal/Metal021_1K_Metalness.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Metal/Metal021_1K_Metalness.jpg
+
+#begin Textures/Metal/Metal021_1K_Normal.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Metal/Metal021_1K_Normal.jpg
+
+#begin Textures/Metal/Metal021_1K_Roughness.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Metal/Metal021_1K_Roughness.jpg
 
 #begin Textures/T_Bricks.png
 /importer:TextureImporter

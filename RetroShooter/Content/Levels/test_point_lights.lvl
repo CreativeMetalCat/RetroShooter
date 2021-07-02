@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Level name="test" version = "0.0.1">
+    <Data>
+        <AmbientLightColor>1 1 1 1</AmbientLightColor>
+        <AmbientLightIntensity>1</AmbientLightIntensity>
+    </Data>
+    <Actors>
+        <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
+            <Location>100 100 100</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>1 0 1 1</Color>
+            <Intensity>1</Intensity>
+            <Radius>1000</Radius>
+        </Actor>
+        <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
+            <Location>-500 100 100</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>1 0 1 1</Color>
+            <Intensity>1</Intensity>
+            <Radius>1000</Radius>
+        </Actor>
+        <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
+            <Location>-900 100 100</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>1 0 1 1</Color>
+            <Intensity>1</Intensity>
+            <Radius>1000</Radius>
+        </Actor>
+        <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
+            <Location>100 100 500</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>1 0 1 1</Color>
+            <Intensity>1</Intensity>
+            <Radius>1000</Radius>
+        </Actor>
+        <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
+            <Location>-500 100 500</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>1 0 1 1</Color>
+            <Intensity>1</Intensity>
+            <Radius>1000</Radius>
+        </Actor>
+        <Actor name = "light2" type="RetroShooter.Engine.Lighting.PointLight" >
+            <Location>-900 100 500</Location>
+            <Rotation>90 0 0</Rotation>
+            <Color>1 0 1 1</Color>
+            <Intensity>1</Intensity>
+            <Radius>1000</Radius>
+        </Actor>
+    </Actors>
+</Level>

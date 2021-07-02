@@ -20,9 +20,23 @@ namespace RetroShooter.Engine
             try
             {
                 doc.Load("./Content/" + filename + ".lvl");
+
+                var data = doc.DocumentElement.SelectSingleNode("/Level/Data");
+                if (data != null)
+                {
+                    try
+                    {
+                        game.CurrentAmbientLightColor +=
+                            Helpers.XmlHelpers.VectorStringToVec4(data["AmbientLightColor"]?.InnerText);
+                    }
+                    catch (Exception e)
+                    {
+                        // any exception called here should be just ignored as there is no data that might cause huge errors
+                    }
+                }
                 var actors = doc.DocumentElement.SelectSingleNode("/Level/Actors") ??
                              throw new NullReferenceException("Level file is missing object list");
-
+                
                 List<Actor> result = new List<Actor>();
                 foreach (XmlNode node in actors)
                 {

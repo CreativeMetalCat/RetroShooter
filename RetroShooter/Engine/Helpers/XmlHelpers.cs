@@ -5,6 +5,9 @@ namespace RetroShooter.Engine.Helpers
 {
     public static class XmlHelpers
     {
+        /*
+         * Converts string to array of floats. Numbers MUST use "," instead of "."
+         */
         public static float[] VectorStringToArray(string vecString)
         {
             return  vecString.Split(" ").Select(x => float.Parse(x)).ToArray();
@@ -14,6 +17,12 @@ namespace RetroShooter.Engine.Helpers
         {
             float[] vecStr = VectorStringToArray(vecString);
             return new Vector3(vecStr[0],vecStr[1],vecStr[2]);
+        }
+        
+        public static Vector4 VectorStringToVec4(string vecString)
+        {
+            float[] vecStr = VectorStringToArray(vecString);
+            return new Vector4(vecStr[0],vecStr[1],vecStr[2],vecStr[3]);
         }
     }
 }

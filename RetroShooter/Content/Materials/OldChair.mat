@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Material version="0.0.1">>
-  <EffectName>TestEffect</EffectName>
+  <EffectName>DiffuseLightning</EffectName>
  <Textures>
   <Texure type="BaseTexture">Textures/T_Old_Chair_a</Texure>
   <Texure type="NormalTexture">Textures/T_Old_Table_N</Texure>
  </Textures>
+ <Params>
+  <UseSpecularMap type="bool">false</UseSpecularMap>
+</Params>
 </Material>
