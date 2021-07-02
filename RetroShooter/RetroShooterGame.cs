@@ -58,6 +58,14 @@ namespace RetroShooter
          */
         private int lastActorId = 0;
 
+        private float _totalGameTime = 0;
+
+        /*
+         * Amount of time that has passed since the game started
+         * In milliseconds
+         */
+        public float TotalGameTime => _totalGameTime;
+
         /**
          * All of the actors that are spawned in the world
          */
@@ -234,9 +242,7 @@ namespace RetroShooter
             defaultFont = Content.Load<SpriteFont>("bebas_neue");
 
             currentCamera = AddActor(new PlayerCamera3D("player", LastActorId, this, 0.1f, true));
-
-            World.LoadWorld("Levels/test", this);
-
+            
             foreach (Actor actor in actors)
             {
                 actor.Init();
@@ -252,7 +258,8 @@ namespace RetroShooter
                 Exit();
 
             base.Update(gameTime);
-
+            _totalGameTime = gameTime.TotalGameTime.Milliseconds;
+            
             foreach (Actor actor in actors)
             {
                 actor.Update(gameTime.ElapsedGameTime.Milliseconds);
@@ -408,9 +415,6 @@ namespace RetroShooter
             PointLightsDirty = false;
             SpotlightsDirty = false;
             DirectionalLightDirty = false;
-            
-            GetActor("spotlight1").Rotation += new Vector3(0, gameTime.ElapsedGameTime.Milliseconds / 10f, 0);
-            AddDebugMessage(GetActor("spotlight1").Rotation.ToString(),0,Color.Blue);
 
             AddDebugMessage(gameTime.ElapsedGameTime.Milliseconds.ToString(), 0, Color.Blue);
             if (!IsMouseVisible)

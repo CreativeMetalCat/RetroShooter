@@ -38,6 +38,18 @@
 #begin Levels/test.lvl
 /copy:Levels/test.lvl
 
+#begin Levels/test_dir_lights.lvl
+/copy:Levels/test_dir_lights.lvl
+
+#begin Levels/test_main_room.lvl
+/copy:Levels/test_main_room.lvl
+
+#begin Levels/test_point_lights.lvl
+/copy:Levels/test_point_lights.lvl
+
+#begin Levels/test_spot_lights.lvl
+/copy:Levels/test_spot_lights.lvl
+
 #begin Materials/BaseMaterial.mat
 /copy:Materials/BaseMaterial.mat
 

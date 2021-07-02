@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Level name="test" version = "0.0.1">
+    <Data>
+        <AmbientLightColor>1 1 1 1</AmbientLightColor>
+        <AmbientLightIntensity>1</AmbientLightIntensity>
+    </Data>
+    <Actors>
+       <Actor name = "sun" type="RetroShooter.Engine.Lighting.DirectionalLight" >
+            <Location>0 0 0</Location>
+            <Rotation>0 0 0</Rotation>
+            <Color>1 1 1 1</Color>
+            <Intensity>1</Intensity>
+        </Actor>
+    </Actors>
+</Level>
